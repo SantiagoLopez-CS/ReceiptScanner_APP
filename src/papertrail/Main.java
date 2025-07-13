@@ -4,6 +4,8 @@ import papertrail.model.Budget;
 import papertrail.model.Category;
 import papertrail.model.Task;
 import papertrail.model.Receipt;
+import papertrail.service.BudgetManager;
+import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
 
 import java.time.LocalDate;
@@ -21,46 +23,59 @@ public class Main {
                 LocalDate.of(2025, 9, 7),
                 280.00,
                 false);
-        System.out.println("Initial Task:\n" + task);
 
         // Receipt Test
-        Receipt receipt = new Receipt(
+        Receipt autoZoneReceipt = new Receipt(
                 "AutoZone",
                 Category.TRANSPORTATION,
                 LocalDate.of(2025, 3, 15),
                 54.55);
-        System.out.println("\nReceipt:\n" + receipt);
 
         // Budget Test
         Budget grocerieBudget = new Budget(
                 "Grocery Budget",
                 Category.FOOD,
                 200.00);
-        System.out.println("\nBudget:\n" + grocerieBudget);
+
 
         // -----------------------
         // ✅ TaskService Tests
         System.out.println("\n=== TaskService Tests ===");
 
-        TaskManager service = new TaskManager();
+        TaskManager taskManager = new TaskManager();
 
         // Test 1: Add a task
-        service.addTask(task);
+        taskManager.addTask(task);
         System.out.println("\n[Add Task] Task List:");
-        service.getAllTasks().forEach(System.out::println);
+        // For every task in the list, print it
+        taskManager.getAllTasks().forEach(System.out::println);
 
         // Test 2: Complete the task
-        boolean completed = service.completeTask(task.getId());
+        boolean completed = taskManager.completeTask(task.getId());
         System.out.println("\n[Complete Task] Marked as complete: " + completed);
-        System.out.println(service.getTaskById(task.getId()));
+        System.out.println(taskManager.getTaskById(task.getId()));
 
         // Test 3: Get pending tasks
         System.out.println("\n[Pending Tasks] Should be empty:");
-        service.getPendingTasks().forEach(System.out::println);
+        taskManager.getPendingTasks().forEach(System.out::println);
 
         // Test 4: Remove the task
-        boolean removed = service.removeTask(task.getId());
+        boolean removed = taskManager.removeTask(task.getId());
         System.out.println("\n[Remove Task] Removed: " + removed);
-        System.out.println("[Remaining Tasks]: " + service.getAllTasks().size());
+        System.out.println("[Remaining Tasks]: " + taskManager.getAllTasks().size());
+
+        // BudgetManager & ReceiptManager Tests;
+        BudgetManager budgetManager = new BudgetManager();
+        ReceiptManager receiptManager = new ReceiptManager(budgetManager);
+
+        // Test 1: Add Budget first, so expenses have somewhere to go
+        Budget transportBudget = new Budget("Car Stuff", Category.TRANSPORTATION, 280);
+        budgetManager.addBudget(transportBudget);
+        // Test 2: Add a receipt (this should automatically update the budget)
+        receiptManager.addReceipt(autoZoneReceipt);
+        // Test 3: View updated budgets
+        System.out.println("\n=== Updated Budgets ===");
+        budgetManager.getAllBudgets().forEach(System.out::println);
+
     }
 }
