@@ -10,7 +10,7 @@ import papertrail.service.TaskManager;
 
 import java.time.LocalDate;
 
-public class Main {
+public class BackendTests {
     public static void main(String[] args) {
         System.out.println("PaperTrail backend is running...");
         System.out.println("-----------------------------");
