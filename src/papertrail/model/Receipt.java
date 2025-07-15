@@ -36,8 +36,7 @@ public class Receipt {
     // Display Receipt
     @Override
     public String toString() {
-        return "Receipt #: " + id +
-                "\nStore: " + store + " (" + category + ")" +
+        return "Store: " + store + " (" + category + ")" +
                 "\nDate: " + dayOfPurchase +
                 "\nAmount Spent: $" + amountSpent;
     }

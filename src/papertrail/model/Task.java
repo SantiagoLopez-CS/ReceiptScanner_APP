@@ -45,11 +45,10 @@ public class Task {
     // Display Task object
     @Override
     public String toString() {
-        return "Task ID: " + id +
-                "\nTitle: " + title +
+        return "Title: " + title +
                 "\nDescription: " + description +
-                "\nCategory: " + category +
                 "\nDue Date: " + dueDate +
+                "\nCategory: " + category +
                 "\nExpected Amount: $" + expectedAmount +
                 "\nStatus: " + (isCompleted ? "Completed [✓]" : "Pending [✗]");
     }
