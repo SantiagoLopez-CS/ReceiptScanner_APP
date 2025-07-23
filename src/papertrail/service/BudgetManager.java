@@ -5,46 +5,46 @@ import papertrail.model.Category;
 import papertrail.model.Receipt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BudgetManager {
-    // Create list of budget's
-    private final List<Budget> budgets = new ArrayList<>();
-    // Add budget to the list
+    // Map budgets by category for fast lookup
+    private final Map<Category, Budget> budgets = new HashMap<>();
+    // Add budget to the map(keyed by category)
     public void addBudget(Budget budget) {
-        budgets.add(budget);
+        budgets.put(budget.getCategory(), budget);
     }
     // Show all the current Budget's with a COPY of the real list
     public List<Budget> getAllBudgets() {
-        return new ArrayList<>(budgets);
+        resetAllBudgetsIfNeeded();
+        return new ArrayList<>(budgets.values());
     }
     // Separate method for resetting budgets
     public void resetAllBudgetsIfNeeded() {
-        for (Budget b : budgets) {
+        for (Budget b : budgets.values()) {
             b.resetIfNeeded();
         }
     }
 
     // Function to add an expense to a particular budget with the receipt price
     public boolean addExpense(Category category, double amount) {
-        for (Budget budget : budgets) { // For each Budget object in the budgets list
-            budget.resetIfNeeded(); // Ensure the list is updated before adding
-            if (budget.getCategory() == category) {
-                budget.addExpense(amount);
-                return true;
-            }
+        Budget budget = budgets.get(category);
+        if (budget != null) {
+            budget.resetIfNeeded(); // Reset if needed before adding expense
+            budget.addExpense(amount);
+            return true;
         }
         return false;
     }
 
     // (Optional) Get a specific budget by category
     public Budget getBudgetByCategory(Category category) {
-        for (Budget budget : budgets) {
-            budget.resetIfNeeded(); // Keep fresh
-            if (budget.getCategory() == category) {
-                return budget;
-            }
+        Budget budget = budgets.get(category);
+        if (budget != null) {
+            budget.resetIfNeeded();
         }
-        return null;
+        return budget;
     }
 }

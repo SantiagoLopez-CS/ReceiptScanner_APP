@@ -117,7 +117,8 @@ public class BudgetManagerView extends VBox {
                     budget.getCategory() + " | $" +
                     budget.getLimit() + " limit | $" +
                     budget.getSpent() + " spent | $" +
-                    budget.getRemaining() + " left"
+                    budget.getRemaining() + " left | " +
+                    budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
             );
             mainBudgetListVBox.getChildren().add(budgetLabel);
         }

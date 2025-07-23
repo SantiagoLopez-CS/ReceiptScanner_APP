@@ -41,6 +41,11 @@ public class Budget {
         return limit - spent;
     }
 
+    public BudgetPeriod getPeriod() {
+        return period;
+    }
+
+
     public void resetIfNeeded() {
         LocalDate now = LocalDate.now();
         boolean shouldReset = switch (period) {
