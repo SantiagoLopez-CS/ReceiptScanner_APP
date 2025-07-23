@@ -1,5 +1,7 @@
 package papertrail.model;
 
+import java.time.LocalDate;
+
 // Track how much money is allocated and spent in a specific category
 public class Budget {
     private String title;
@@ -7,6 +9,7 @@ public class Budget {
     private double limit; // How much the user plans to spend
     private double spent; // How much has been spent so far
     private final BudgetPeriod period;
+    private LocalDate lastResetDate;
 
     public Budget(String title, Category category, double limit, BudgetPeriod period) {
         this.title = title;
@@ -14,6 +17,7 @@ public class Budget {
         this.limit = limit;
         this.period = period;
         this.spent = 0.00;
+        this.lastResetDate = LocalDate.now();
     }
 
     // Getters and Setters
@@ -35,6 +39,19 @@ public class Budget {
 
     public double getRemaining() {
         return limit - spent;
+    }
+
+    public void resetIfNeeded() {
+        LocalDate now = LocalDate.now();
+        boolean shouldReset = switch (period) {
+            case WEEKLY -> lastResetDate.plusWeeks(1).isBefore(now) || lastResetDate.plusWeeks(1).isEqual(now);
+            case MONTHLY -> lastResetDate.plusMonths(1).isBefore(now) || lastResetDate.plusMonths(1).isEqual(now);
+            case YEARLY -> lastResetDate.plusYears(1).isBefore(now) || lastResetDate.plusYears(1).isEqual(now);
+        };
+        if (shouldReset) {
+            this.spent = 0.0;
+            this.lastResetDate = now;
+        }
     }
 
     @Override

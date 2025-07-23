@@ -11,6 +11,8 @@ import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
 
+import java.util.List;
+
 
 public class BudgetManagerView extends VBox {
     private final BudgetManager budgetManager;
@@ -85,6 +87,8 @@ public class BudgetManagerView extends VBox {
                     Alert duplicate = new Alert(Alert.AlertType.INFORMATION, "This budget already exists.");
                     duplicate.show(); // <- you also forgot to show it!
                     return;
+                } else {
+                    budgetManager.addBudget(newBudget);
                 }
 
                     refreshBudgets();
@@ -96,7 +100,7 @@ public class BudgetManagerView extends VBox {
 
         getChildren().addAll(
                 budgetTitle,
-                new HBox(10, titleField, categoryComboBox, limitField),
+                new HBox(10, titleField, categoryComboBox, limitField, periodComboBox),
                 addBudgetBtn,
                 new Separator(),
                 scrollPane,
@@ -104,6 +108,8 @@ public class BudgetManagerView extends VBox {
         );
     }
     public void refreshBudgets() {
+        budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per view update
+
         mainBudgetListVBox.getChildren().clear();
         for (var budget : budgetManager.getAllBudgets()) {
             Label budgetLabel = new Label(

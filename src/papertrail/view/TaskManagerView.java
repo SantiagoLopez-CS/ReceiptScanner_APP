@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import papertrail.model.Budget;
+import papertrail.model.BudgetPeriod;
 import papertrail.model.Task;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
@@ -103,12 +104,14 @@ public class TaskManagerView  extends VBox {
             // Check if a budget for this category already exists
             boolean budgetExists = budgetManager.getAllBudgets().stream()
                     .anyMatch(budget -> budget.getCategory() == newTask.getCategory());
+
             // If not, create a new Budget
             if (!budgetExists) {
                 budgetManager.addBudget(new Budget(
                         newTask.getTitle() + " Budget",
                         newTask.getCategory(),
-                        newTask.getExpectedAmount()
+                        newTask.getExpectedAmount(),
+                        BudgetPeriod.MONTHLY
                 ));
                 System.out.println("Auto-created budget for task: " + newTask.getTitle());
             }

@@ -18,9 +18,17 @@ public class BudgetManager {
     public List<Budget> getAllBudgets() {
         return new ArrayList<>(budgets);
     }
+    // Separate method for resetting budgets
+    public void resetAllBudgetsIfNeeded() {
+        for (Budget b : budgets) {
+            b.resetIfNeeded();
+        }
+    }
+
     // Function to add an expense to a particular budget with the receipt price
     public boolean addExpense(Category category, double amount) {
         for (Budget budget : budgets) { // For each Budget object in the budgets list
+            budget.resetIfNeeded(); // Ensure the list is updated before adding
             if (budget.getCategory() == category) {
                 budget.addExpense(amount);
                 return true;
@@ -31,9 +39,12 @@ public class BudgetManager {
 
     // (Optional) Get a specific budget by category
     public Budget getBudgetByCategory(Category category) {
-        return budgets.stream()
-                .filter(b -> b.getCategory() == category)
-                .findFirst()
-                .orElse(null);
+        for (Budget budget : budgets) {
+            budget.resetIfNeeded(); // Keep fresh
+            if (budget.getCategory() == category) {
+                return budget;
+            }
+        }
+        return null;
     }
 }
