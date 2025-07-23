@@ -1,9 +1,6 @@
 package papertrail;
 
-import papertrail.model.Budget;
-import papertrail.model.Category;
-import papertrail.model.Task;
-import papertrail.model.Receipt;
+import papertrail.model.*;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
@@ -35,7 +32,8 @@ public class BackendTests {
         Budget grocerieBudget = new Budget(
                 "Grocery Budget",
                 Category.FOOD,
-                200.00);
+                200.00,
+                BudgetPeriod.WEEKLY);
 
 
         // -----------------------
@@ -69,7 +67,7 @@ public class BackendTests {
         ReceiptManager receiptManager = new ReceiptManager(budgetManager);
 
         // Test 1: Add Budget first, so expenses have somewhere to go
-        Budget transportBudget = new Budget("Car Stuff", Category.TRANSPORTATION, 280);
+        Budget transportBudget = new Budget("Car Stuff", Category.TRANSPORTATION, 280, BudgetPeriod.MONTHLY);
         budgetManager.addBudget(transportBudget);
         // Test 2: Add a receipt (this should automatically update the budget)
         receiptManager.addReceipt(autoZoneReceipt);

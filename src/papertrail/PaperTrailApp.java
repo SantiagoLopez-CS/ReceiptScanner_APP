@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import papertrail.model.Budget;
+import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
 import papertrail.service.TaskManager;
@@ -27,7 +28,7 @@ public class PaperTrailApp extends Application{
         TaskManager taskManager = new TaskManager();
         BudgetManager budgetManager = new BudgetManager();
         // BudgetUI Test
-        budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00));
+        budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00, BudgetPeriod.WEEKLY));
 
         // MAIN MENU LAYOUT
         VBox mainMenuLayout = new VBox(15); // 15px space between elements

@@ -6,11 +6,13 @@ public class Budget {
     private Category category;
     private double limit; // How much the user plans to spend
     private double spent; // How much has been spent so far
+    private final BudgetPeriod period;
 
-    public Budget(String title, Category category, double limit) {
+    public Budget(String title, Category category, double limit, BudgetPeriod period) {
         this.title = title;
         this.category = category;
         this.limit = limit;
+        this.period = period;
         this.spent = 0.00;
     }
 
