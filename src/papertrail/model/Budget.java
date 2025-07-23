@@ -8,7 +8,7 @@ public class Budget {
     private Category category;
     private double limit; // How much the user plans to spend
     private double spent; // How much has been spent so far
-    private final BudgetPeriod period;
+    private BudgetPeriod period;
     private LocalDate lastResetDate;
 
     public Budget(String title, Category category, double limit, BudgetPeriod period) {
@@ -45,6 +45,9 @@ public class Budget {
         return period;
     }
 
+    public void setPeriod(BudgetPeriod period) {
+        this.period = period;
+    }
 
     public void resetIfNeeded() {
         LocalDate now = LocalDate.now();

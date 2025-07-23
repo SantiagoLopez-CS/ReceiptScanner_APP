@@ -18,6 +18,13 @@ public class BudgetManagerView extends VBox {
     private final BudgetManager budgetManager;
     private final HBox budgetContentHBox;
     private final VBox mainBudgetListVBox = new VBox(5);
+    private final TextField titleField = new TextField();
+    private final ComboBox<Category> categoryComboBox = new ComboBox<>();
+    private final TextField limitField = new TextField();
+    private final ComboBox<BudgetPeriod> periodComboBox = new ComboBox<>();
+    private Budget editingBudget = null;
+
+
 
     public BudgetManagerView(BudgetManager budgetManager, Stage primaryStage, Scene mainMenuScene){
         // Store backend reference
@@ -30,14 +37,10 @@ public class BudgetManagerView extends VBox {
         budgetTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         // addBudget fields
-        TextField titleField = new TextField();
         titleField.setPromptText("Title");
-        ComboBox<Category> categoryComboBox = new ComboBox<>();
         categoryComboBox.getItems().addAll(Category.values());
         categoryComboBox.setPromptText("Category");
-        TextField limitField = new TextField();
         limitField.setPromptText("Limit");
-        ComboBox<BudgetPeriod> periodComboBox = new ComboBox<>();
         periodComboBox.getItems().addAll(BudgetPeriod.values());
         periodComboBox.setPromptText("Period");
 
@@ -78,24 +81,34 @@ public class BudgetManagerView extends VBox {
                     return;
                 }
 
-                Budget newBudget = new Budget(title, cat, lim, period);
-
-                boolean exists = budgetManager.getAllBudgets().stream()
-                        .anyMatch(b -> b.getTitle().equals(title) && b.getCategory() == cat);
-
-                if (exists) {
-                    Alert duplicate = new Alert(Alert.AlertType.INFORMATION, "This budget already exists.");
-                    duplicate.show(); // <- you also forgot to show it!
-                    return;
+                if (editingBudget != null) {
+                    // The budget exists, update values
+                    editingBudget.setLimit(lim);
+                    editingBudget.setPeriod(period);
+                    budgetManager.addBudget(editingBudget);
+                    editingBudget = null; // Reset edit mode
                 } else {
-                    budgetManager.addBudget(newBudget);
+                    // Creating a new budget
+                    Budget newBudget = new Budget(title, cat, lim, period);
+
+                    boolean exists = budgetManager.getAllBudgets().stream()
+                            .anyMatch(b -> b.getTitle().equals(title) && b.getCategory() == cat);
+
+                    if (exists) {
+                        Alert duplicate = new Alert(Alert.AlertType.INFORMATION, "This budget already exists.");
+                        duplicate.show(); // <- you also forgot to show it!
+                        return;
+                    } else {
+                        budgetManager.addBudget(newBudget);
+                    }
                 }
 
-                    refreshBudgets();
+                refreshBudgets();
 
-                    titleField.clear();
-                    categoryComboBox.setValue(null);
-                    limitField.clear();
+                titleField.clear();
+                categoryComboBox.setValue(null);
+                limitField.clear();
+                periodComboBox.setValue(null);
         });
 
         getChildren().addAll(
@@ -107,20 +120,48 @@ public class BudgetManagerView extends VBox {
                 backBtn
         );
     }
+    // Separate method for creating a budget row
+    private HBox createBudgetRow(Budget budget) {
+        Label budgetLabel = new Label(
+                budget.getTitle() + " | " +
+                        budget.getCategory() + " | $" +
+                        budget.getLimit() + " limit | $" +
+                        budget.getSpent() + " spent | $" +
+                        budget.getRemaining() + " left | " +
+                        budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
+        );
+
+        // Create and add Edit/Delete Buttons for each Budget
+        Button editBtn = new Button("✏️");
+        Button deleteBtn = new Button("🗑");
+
+        deleteBtn.setOnAction(actionEvent -> {
+            budgetManager.removeBudget(budget);
+            refreshBudgets();
+        });
+
+        editBtn.setOnAction(actionEvent -> {
+            // Populate input fields with the current Budget's values
+            titleField.setText(budget.getTitle());
+            categoryComboBox.setValue(budget.getCategory());
+            limitField.setText(String.valueOf(budget.getLimit()));
+            periodComboBox.setValue(budget.getPeriod());
+
+            budgetManager.removeBudget(budget); // Remove it temporarily from Map, replace after editing
+            editingBudget = budget;
+        });
+
+        HBox budgetRow = new HBox(10, budgetLabel, editBtn, deleteBtn);
+        budgetRow.setPadding(new Insets(5));
+        budgetRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        return budgetRow;
+    }
     public void refreshBudgets() {
         budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per view update
 
         mainBudgetListVBox.getChildren().clear();
-        for (var budget : budgetManager.getAllBudgets()) {
-            Label budgetLabel = new Label(
-                    budget.getTitle() + " | " +
-                    budget.getCategory() + " | $" +
-                    budget.getLimit() + " limit | $" +
-                    budget.getSpent() + " spent | $" +
-                    budget.getRemaining() + " left | " +
-                    budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
-            );
-            mainBudgetListVBox.getChildren().add(budgetLabel);
+        for (Budget budget : budgetManager.getAllBudgets()) {
+            mainBudgetListVBox.getChildren().add(createBudgetRow(budget));
         }
     }
 }

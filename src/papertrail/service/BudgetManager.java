@@ -16,6 +16,9 @@ public class BudgetManager {
     public void addBudget(Budget budget) {
         budgets.put(budget.getCategory(), budget);
     }
+    public void removeBudget(Budget budget) {
+        budgets.remove(budget);
+    }
     // Show all the current Budget's with a COPY of the real list
     public List<Budget> getAllBudgets() {
         resetAllBudgetsIfNeeded();
