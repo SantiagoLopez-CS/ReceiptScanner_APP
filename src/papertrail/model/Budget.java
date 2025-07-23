@@ -11,7 +11,7 @@ public class Budget {
         this.title = title;
         this.category = category;
         this.limit = limit;
-        this.spent = 0;
+        this.spent = 0.00;
     }
 
     // Getters and Setters
@@ -29,6 +29,10 @@ public class Budget {
     // Add amount spent for a particular budget
     public void addExpense(double amount) {
         this.spent += amount;
+    }
+
+    public double getRemaining() {
+        return limit - spent;
     }
 
     @Override

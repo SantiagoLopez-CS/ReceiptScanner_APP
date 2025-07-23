@@ -5,7 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import papertrail.model.Budget;
+import papertrail.model.Category;
+import papertrail.service.BudgetManager;
 import papertrail.service.TaskManager;
+import papertrail.view.BudgetManagerView;
 import papertrail.view.TaskManagerView;
 
 public class PaperTrailApp extends Application{
@@ -13,6 +17,7 @@ public class PaperTrailApp extends Application{
     // Declare scenes to allow switching
     private Scene mainMenuScene;
     private Scene taskManagerScene;
+    private Scene budgetManagerScene;
 
     @Override
     public void start(Stage primaryStage) {
@@ -20,6 +25,9 @@ public class PaperTrailApp extends Application{
 
         // Create TaskManager backend to pass into view
         TaskManager taskManager = new TaskManager();
+        BudgetManager budgetManager = new BudgetManager();
+        // BudgetUI Test
+        budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00));
 
         // MAIN MENU LAYOUT
         VBox mainMenuLayout = new VBox(15); // 15px space between elements
@@ -36,14 +44,21 @@ public class PaperTrailApp extends Application{
         mainMenuScene = new Scene(mainMenuLayout, 400, 300);
 
         // TaskManager Scene
-        TaskManagerView taskManagerView = new TaskManagerView(taskManager, primaryStage, mainMenuScene);
+        TaskManagerView taskManagerView = new TaskManagerView(taskManager, budgetManager, primaryStage, mainMenuScene);
         taskManagerScene = new Scene(taskManagerView, 600, 400);
+
+        // BudgetManager Scene
+        BudgetManagerView budgetManagerView = new BudgetManagerView(budgetManager, primaryStage, mainMenuScene);
+        budgetManagerScene = new Scene(budgetManagerView, 600, 400);
 
         // Button Actions
         tasksBtn.setOnAction(actionEvent -> primaryStage.setScene(taskManagerScene));
+        budgetsBtn.setOnAction(actionEvent -> {
+            budgetManagerView.refreshBudgets();
+            primaryStage.setScene(budgetManagerScene);
+        });
         // TODO: Add actions to open different views later
-        receiptsBtn.setOnAction(e -> System.out.println("Receipts View - Coming Soon"));
-        budgetsBtn.setOnAction(e -> System.out.println("Budgets View - Coming Soon"));
+        receiptsBtn.setOnAction(e -> System.out.println("Budgets View - Coming Soon"));
 
         // Set the Scene and show(make visible)
         primaryStage.setScene(mainMenuScene);
