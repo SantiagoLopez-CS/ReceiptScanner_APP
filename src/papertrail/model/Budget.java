@@ -1,7 +1,6 @@
 package papertrail.model;
 
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.UUID;
 
 // Represents a budget with a category, spending limit, and reset schedule.

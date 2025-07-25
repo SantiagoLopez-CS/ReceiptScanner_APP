@@ -1,5 +1,6 @@
 package papertrail.view;
 
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -10,9 +11,6 @@ import papertrail.model.Budget;
 import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
-
-import java.util.List;
-
 
 public class BudgetManagerView extends VBox {
     private final BudgetManager budgetManager;
@@ -91,6 +89,7 @@ public class BudgetManagerView extends VBox {
                 } else {
                     // Creating a new budget
                     Budget newBudget = new Budget(title, cat, lim, period);
+                    budgetManager.addBudget(newBudget);
                 }
 
                 refreshBudgets();
@@ -113,7 +112,7 @@ public class BudgetManagerView extends VBox {
     // Separate method for creating a budget row
     private HBox createBudgetRow(Budget budget) {
         // Status label: "left" or "OVERSPENT"
-        String status = budget.getRemaining() < 0 ? "OVERSPENT" : "left";
+        String status = budget.isOverspent() ? "OVERSPENT" : "left";
         String remainingStr = String.format("%.2f", budget.getRemaining());
 
         Label budgetLabel = new Label(
@@ -128,6 +127,9 @@ public class BudgetManagerView extends VBox {
         if (budget.getRemaining() < 0) {
             budgetLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
         }
+
+        Label resetLabel = new Label("Last Reset: " + budget.getLastResetDate());
+        resetLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
 
         // Create and add Edit/Delete Buttons for each Budget
         Button editBtn = new Button("✏️");
@@ -145,14 +147,15 @@ public class BudgetManagerView extends VBox {
             limitField.setText(String.valueOf(budget.getLimit()));
             periodComboBox.setValue(budget.getPeriod());
 
-            Category originalCategory = budget.getCategory();
             budgetManager.removeBudget(budget);
             editingBudget = budget;
         });
 
-        HBox budgetRow = new HBox(10, budgetLabel, editBtn, deleteBtn);
+        VBox budgetInfoBox = new VBox(2, budgetLabel, resetLabel);
+        HBox budgetRow = new HBox(10, budgetInfoBox, editBtn, deleteBtn);
         budgetRow.setPadding(new Insets(5));
         budgetRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        budgetRow.setId(budget.getId());
         return budgetRow;
     }
     public void refreshBudgets() {
@@ -163,4 +166,20 @@ public class BudgetManagerView extends VBox {
             mainBudgetListVBox.getChildren().add(createBudgetRow(budget));
         }
     }
+    // Add highlight to budget after receipt is deleted
+    public void highlightBudget(String budgetId) {
+        for (javafx.scene.Node node : mainBudgetListVBox.getChildren()) {
+            if (node instanceof HBox row && budgetId.equals(row.getId())) {
+                String originalStyle = row.getStyle();
+                row.setStyle(originalStyle + "; -fx-background-color: yellow;");
+
+                // Revert after a delay
+                PauseTransition pause = new PauseTransition(javafx.util.Duration.seconds(1.5));
+                pause.setOnFinished(e -> row.setStyle(originalStyle));
+                pause.play();
+                break;
+            }
+        }
+    }
+
 }

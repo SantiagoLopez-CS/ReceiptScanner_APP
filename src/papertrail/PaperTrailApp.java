@@ -5,15 +5,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import papertrail.model.Budget;
-import papertrail.model.BudgetPeriod;
-import papertrail.model.Category;
+import papertrail.model.*;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
 import papertrail.view.BudgetManagerView;
 import papertrail.view.ReceiptManagerView;
 import papertrail.view.TaskManagerView;
+
+import java.time.LocalDate;
 
 public class PaperTrailApp extends Application{
 
@@ -31,10 +31,19 @@ public class PaperTrailApp extends Application{
         TaskManager taskManager = new TaskManager();
         BudgetManager budgetManager = new BudgetManager();
         ReceiptManager receiptManager = new ReceiptManager(budgetManager);
+        //TaskUI Tests
+        taskManager.addTask(new Task("Finish budget report", "Complete the Q3 budget summary and send to manager.", Category.PERSONAL, LocalDate.now().plusDays(2), 0.00, false));
+        taskManager.addTask(new Task("Upload receipt photos", "Scan and upload all grocery and gas receipts for July.", Category.FOOD, LocalDate.now().plusDays(1), 120.50, false));
+        taskManager.addTask(new Task("Pay rent", "Transfer payment to landlord's account.", Category.HOUSING, LocalDate.now().plusDays(5), 850.00, false));
+        taskManager.addTask(new Task("Review subscriptions", "Cancel unused entertainment subscriptions.", Category.ENTERTAINMENT, LocalDate.now().plusDays(3), 15.99, false));
         // BudgetUI Test
         budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00, BudgetPeriod.WEEKLY));
         budgetManager.addBudget(new Budget("Gas Budget", Category.TRANSPORTATION, 50.00, BudgetPeriod.MONTHLY));
         budgetManager.addBudget(new Budget("Fun Budget", Category.ENTERTAINMENT, 75.00, BudgetPeriod.MONTHLY));
+        // ReceiptUI Tests
+        receiptManager.addReceipt(new Receipt("Walmart", Category.FOOD, LocalDate.now().minusDays(1), 24.50, budgetManager.getAllBudgets().get(0).getId()));
+        receiptManager.addReceipt(new Receipt("Shell", Category.TRANSPORTATION, LocalDate.now().minusDays(2), 35.00, budgetManager.getAllBudgets().get(1).getId()));
+        receiptManager.addReceipt(new Receipt("Netflix", Category.ENTERTAINMENT, LocalDate.now().minusDays(3), 12.99, budgetManager.getAllBudgets().get(2).getId()));
 
         // MAIN MENU LAYOUT
         VBox mainMenuLayout = new VBox(15); // 15px space between elements
@@ -60,6 +69,7 @@ public class PaperTrailApp extends Application{
 
         // ReceiptManager Scene
         ReceiptManagerView receiptManagerView = new ReceiptManagerView(receiptManager, budgetManager, primaryStage, mainMenuScene);
+        receiptManagerView.setBudgetManagerView(budgetManagerView, budgetManagerScene);
         receiptManagerScene = new Scene(receiptManagerView, 600, 400);
 
         // Button Actions

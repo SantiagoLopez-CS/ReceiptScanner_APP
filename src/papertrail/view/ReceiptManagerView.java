@@ -19,10 +19,15 @@ public class ReceiptManagerView extends VBox {
     private final BudgetManager budgetManager;
     private final HBox receiptContentHBox;
     private final VBox receiptListVBox = new VBox(5);
+    private BudgetManagerView budgetManagerView;
+    private Scene budgetScene;
+    private Stage primaryStage;
 
     public ReceiptManagerView(ReceiptManager receiptManager, BudgetManager budgetManager, Stage primaryStage, Scene mainMenuScene) {
         this.receiptManager = receiptManager;
         this.budgetManager = budgetManager;
+        this.primaryStage = primaryStage;
+
 
         setSpacing(10);
         setPadding(new Insets(15));
@@ -122,7 +127,7 @@ public class ReceiptManagerView extends VBox {
         receiptListVBox.getChildren().clear();
 
         for (Receipt receipt : receiptManager.getAllReceipts()) {
-            if (receipt == null) continue; // Safe guard
+            if (receipt == null) continue; // Safeguard
 
             String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
 
@@ -132,23 +137,41 @@ public class ReceiptManagerView extends VBox {
                     receipt.getDayOfPurchase() + " | $" +
                     formattedAmount + " spent"
             );
-            Button deleteBtn = new Button("🗑");
-            deleteBtn.setOnAction(actionEvent -> {
-                receiptManager.removeReceipt(receipt.getId());
-                // Update the associated budget
-                String budgetId = receipt.getBudgetId();
-                double amount = receipt.getAmountSpent();
-                if (budgetId != null) {
-                    budgetManager.removeExpense(budgetId, amount);
-                }
-                refreshReceipts();
-            });
-
-            HBox receiptRow = new HBox(10, receiptLabel, deleteBtn);
-            receiptRow.setPadding(new Insets(5));
-            receiptRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+            HBox receiptRow = getHBox(receipt, receiptLabel);
 
             receiptListVBox.getChildren().add(receiptRow);
         }
+    }
+
+    private HBox getHBox(Receipt receipt, Label receiptLabel) {
+        Button deleteBtn = new Button("🗑");
+        deleteBtn.setOnAction(actionEvent -> {
+            // Implement removeReceipt boolean return
+            boolean removed = receiptManager.removeReceipt(receipt.getId());
+            if (!removed) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to delete receipt.");
+                alert.show();
+            } else {
+                refreshReceipts();
+
+                // Highlight the updated budget row
+                if (budgetManagerView != null && receipt.getBudgetId() != null) {
+                    budgetManagerView.refreshBudgets(); // Ensure view is up-to-date
+                    budgetManagerView.highlightBudget(receipt.getBudgetId());
+                    if (budgetScene != null) {
+                        primaryStage.setScene(budgetScene);
+                    }
+                }
+            }
+        });
+
+        HBox receiptRow = new HBox(10, receiptLabel, deleteBtn);
+        receiptRow.setPadding(new Insets(5));
+        receiptRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        return receiptRow;
+    }
+    public void setBudgetManagerView(BudgetManagerView view, Scene scene) {
+        this.budgetManagerView = view;
+        this.budgetScene = scene;
     }
 }

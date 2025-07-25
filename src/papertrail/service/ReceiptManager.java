@@ -2,8 +2,6 @@ package papertrail.service;
 
 import papertrail.model.Budget;
 import papertrail.model.Receipt;
-import papertrail.model.Category;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
