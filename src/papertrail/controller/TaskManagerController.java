@@ -32,6 +32,7 @@ public class TaskManagerController {
     // Separate List elements
     @FXML private VBox incompleteTasksVBOX;
     @FXML private VBox completedTasksVBOX;
+    @FXML private HBox taskListHBox;
     // Elements for searching/filtering tasks
     @FXML private TextField searchField;
     @FXML private ComboBox<Category> filterCategoryBox;
@@ -41,6 +42,11 @@ public class TaskManagerController {
     @FXML private Label categoryErrorLabel;
     @FXML private Label dueDateErrorLabel;
     @FXML private Label amountErrorLabel;
+    // Show list checkbox
+    @FXML private CheckBox showCompletedCheckBox;
+    // Empty list labels
+    @FXML private Label emptyCompletedLabel;
+    @FXML private Label emptyIncompleteLabel;
 
     /*
      * Called automatically after the FXML is loaded.
@@ -54,6 +60,7 @@ public class TaskManagerController {
         // Listeners to trigger filtering
         searchField.textProperty().addListener((obs, old, newVal) -> refreshTasks());
         filterCategoryBox.valueProperty().addListener((obs, old, newVal) -> refreshTasks());
+        showCompletedCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> refreshTasks());
     }
 
     /*
@@ -186,6 +193,10 @@ public class TaskManagerController {
 
         String keyword = searchField.getText().toLowerCase().trim();
         Category selectedCategory = filterCategoryBox.getValue();
+        boolean showCompleted = showCompletedCheckBox.isSelected();
+
+        int incompleteCount = 0;
+        int completedCount = 0;
 
         for (Task task : taskManager.getAllTasks()) {
             if (task == null) continue; // Guard against null entries (unlikely but safe)
@@ -196,14 +207,21 @@ public class TaskManagerController {
 
             if (!(matchesKeyword && matchesCategory)) continue;
 
+            // Skip completed tasks if user unchecked the box
+            if (task.isCompleted() && !showCompleted) {
+                continue;
+            }
+
             // Checkbox to toggle completion
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(task.isCompleted()); // When selected run isCompleted function
+            checkBox.getStyleClass().add("task-checkbox");
 
             // Task info label
             Label taskLabel = new Label(task.getTitle() + " - Due: " + task.getDueDate());
             // Make the Label clickable to view whole Task: Title, descr, cat, dueDate, amount
             taskLabel.setOnMouseClicked(event -> showTaskDetails(task));
+            taskLabel.getStyleClass().add("task-label");
 
             // Delete Button
             Button deleteBtn = new Button("🗑");
@@ -214,6 +232,7 @@ public class TaskManagerController {
                 taskManager.removeTask(task.getId());
                 refreshTasks(); // Refresh list after deletion
             });
+            deleteBtn.getStyleClass().add("delete-button");
 
             // Handle Checkbox toggle
             checkBox.setOnAction(e -> {
@@ -229,13 +248,19 @@ public class TaskManagerController {
             HBox taskRow = new HBox(10, checkBox, taskLabel, deleteBtn);
             taskRow.setPadding(new Insets(5));
             taskRow.setStyle(" -fx-border-color: lightgray; -fx-border-width: 1;");
+            taskRow.getStyleClass().add("task-row");
 
             if (task.isCompleted()) {
                 completedTasksVBOX.getChildren().add(taskRow);
+                completedCount++;
             } else {
                 incompleteTasksVBOX.getChildren().add(taskRow);
+                incompleteCount++;
             }
         }
+        // Show or hide empty state Labels
+        emptyIncompleteLabel.setVisible(incompleteCount == 0);
+        emptyCompletedLabel.setVisible(completedCount == 0);
     }
     /**
      * Opens a popup dialog showing all details of the selected Task.

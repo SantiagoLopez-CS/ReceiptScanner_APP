@@ -7,12 +7,16 @@
 <VBox fx:id="rootVBox"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="papertrail.controller.TaskManagerController"
-      spacing="10">
+      stylesheets="@/papertrail/style/task-manager.css"
+      spacing="10" minWidth="600" minHeight="600">
     <padding>
         <Insets top="15" right="15" bottom="15" left="15" />
     </padding>
 
     <Label text="Task Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Section Label -->
+    <Label text="➕ Add a New Task" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Row 1: Title + Description -->
     <HBox spacing="10">
@@ -67,7 +71,7 @@
         </VBox>
     </HBox>
 
-    <Button text="Add Task" onAction="#handleAddTask">
+    <Button text="Add Task" onAction="#handleAddTask" styleClass="add-button">
         <tooltip>
             <Tooltip text="Save a new task using the fields above" />
         </tooltip>
@@ -75,6 +79,10 @@
 
     <Separator />
 
+    <!-- Section Label -->
+    <Label text="🔍 Search / Filter Tasks" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+    <!-- Search/Filter -->
     <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="searchField" promptText="Search by title...">
             <tooltip>
@@ -86,30 +94,48 @@
                 <Tooltip text="Select a category to narrow down list of task's" />
             </tooltip>
         </ComboBox>
-        <Button text="Clear Filter" onAction="#handleClearFilter">
+        <Button text="Clear Filter" onAction="#handleClearFilter" styleClass="clear-button">
             <tooltip>
                 <Tooltip text="Clear all search and filter fields" />
             </tooltip>
         </Button>
     </HBox>
 
+    <!-- Toggle for Showing Completed Tasks -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <CheckBox text="Show Completed Tasks" fx:id="showCompletedCheckBox" selected="true">
+            <tooltip>
+                <Tooltip text="Toggle to show or hide completed tasks" />
+            </tooltip>
+        </CheckBox>
+    </HBox>
+
+    <!-- Section Label -->
+    <Label text="📋 Task List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
     <ScrollPane fitToWidth="true">
-        <HBox fx:id="taskListHBox" spacing="30">
+        <HBox fx:id="taskListHBox" spacing="30" minHeight="200">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <VBox spacing="10">
+            <!-- Incomplete -->
+            <VBox spacing="10" minWidth="250">
                 <Label text="Incomplete Tasks" />
-                <VBox fx:id="incompleteTasksVBOX" spacing="5" />
+                <VBox fx:id="incompleteTasksVBOX" spacing="5">
+                    <Label text="No incomplete tasks." fx:id="emptyIncompleteLabel" visible="false" />
+                </VBox>
             </VBox>
-            <VBox spacing="10">
+            <!-- Complete -->
+            <VBox spacing="10" minWidth="250">
                 <Label text="✅ Completed Tasks" />
-                <VBox fx:id="completedTasksVBOX" spacing="5"/>
+                <VBox fx:id="completedTasksVBOX" spacing="5">
+                    <Label text="No completed tasks yet." fx:id="emptyCompletedLabel" visible="false" />
+                </VBox>
             </VBox>
         </HBox>
     </ScrollPane>
 
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>
