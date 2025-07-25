@@ -1,8 +1,10 @@
 package papertrail.model;
 
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.UUID;
 
-// Track how much money is allocated and spent in a specific category
+// Represents a budget with a category, spending limit, and reset schedule.
 public class Budget {
     private String title;
     private Category category;
@@ -10,6 +12,7 @@ public class Budget {
     private double spent; // How much has been spent so far
     private BudgetPeriod period;
     private LocalDate lastResetDate;
+    private final String id = UUID.randomUUID().toString();
 
     public Budget(String title, Category category, double limit, BudgetPeriod period) {
         this.title = title;
@@ -21,6 +24,9 @@ public class Budget {
     }
 
     // Getters and Setters
+    public String getId() {
+        return id;
+    }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public Category getCategory() { return category; }
@@ -30,7 +36,21 @@ public class Budget {
     public void setLimit(double limit) { this.limit = limit; }
 
     public double getSpent() { return spent; }
-    public void setSpent(double spent) { this.spent = spent; }
+    public void subtractExpense(double amount) {
+        this.spent = Math.max(0.0, this.spent - amount);
+    }
+    public boolean isOverspent() {
+        return spent > limit;
+    }
+
+    public LocalDate getLastResetDate() {
+        return lastResetDate;
+    }
+
+    public BudgetPeriod getPeriod() {
+        return period;
+    }
+    public void setPeriod(BudgetPeriod period) {this.period = period;}
 
     // Add amount spent for a particular budget
     public void addExpense(double amount) {
@@ -39,14 +59,6 @@ public class Budget {
 
     public double getRemaining() {
         return limit - spent;
-    }
-
-    public BudgetPeriod getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(BudgetPeriod period) {
-        this.period = period;
     }
 
     public void resetIfNeeded() {
@@ -68,6 +80,6 @@ public class Budget {
                 "\nCategory: " + category +
                 "\nLimit: $" + limit +
                 "\nSpent: $" + spent +
-                "\nRemaining: $" + (limit - spent);
+                "\nRemaining: $" + getRemaining();
     }
 }

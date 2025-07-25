@@ -89,8 +89,15 @@ public class TaskManagerView  extends VBox {
             Category cat = categoryBox.getValue();
             LocalDate due = dueDatePicker.getValue();
             double amt;
+
+            if (title.isEmpty() || descr.isEmpty() || cat == null || due == null || amountField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all fields.");
+                alert.show();
+                return;
+            }
+
             try {
-                amt = Double.parseDouble(amountField.getText());
+                amt = Double.parseDouble(amountField.getText().trim());
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter a valid number for 'Amount'.");
                 alert.show();
@@ -145,6 +152,8 @@ public class TaskManagerView  extends VBox {
         completedTasksVBox.getChildren().clear();
 
         for (Task task : taskManager.getAllTasks()) {
+
+            if (task == null) continue; // Guard against null entries (unlikely but safe)
 
             // Checkbox to toggle completion
             CheckBox checkBox = new CheckBox();

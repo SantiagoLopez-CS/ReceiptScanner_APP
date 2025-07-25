@@ -4,21 +4,30 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Receipt {
-    private String id;
+    private final String id;
     private String store;
     private Category category;
     private LocalDate dayOfPurchase;
     private double amountSpent;
+    private String budgetId;
 
-    public Receipt(String store, Category category, LocalDate dayOfPurchase, double amountSpent) {
+    public Receipt(String store, Category category, LocalDate dayOfPurchase, double amountSpent, String budgetId) {
         this.id = UUID.randomUUID().toString(); // auto-generate random ID
         this.store = store;
         this.category = category;
         this.dayOfPurchase = dayOfPurchase;
         this.amountSpent = amountSpent;
+        this.budgetId = budgetId;
     }
 
     // Getters and Setters
+    public String getBudgetId() {
+        return budgetId;
+    }
+    public void setBudgetId(String budgetId) {
+        this.budgetId = budgetId;
+    }
+
     public String getId() { return id; }
 
     public String getStore() { return store; }

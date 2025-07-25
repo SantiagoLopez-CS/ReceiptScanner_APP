@@ -83,6 +83,7 @@ public class BudgetManagerView extends VBox {
 
                 if (editingBudget != null) {
                     // The budget exists, update values
+                    editingBudget.setTitle(title);
                     editingBudget.setLimit(lim);
                     editingBudget.setPeriod(period);
                     budgetManager.addBudget(editingBudget);
@@ -90,17 +91,6 @@ public class BudgetManagerView extends VBox {
                 } else {
                     // Creating a new budget
                     Budget newBudget = new Budget(title, cat, lim, period);
-
-                    boolean exists = budgetManager.getAllBudgets().stream()
-                            .anyMatch(b -> b.getTitle().equals(title) && b.getCategory() == cat);
-
-                    if (exists) {
-                        Alert duplicate = new Alert(Alert.AlertType.INFORMATION, "This budget already exists.");
-                        duplicate.show(); // <- you also forgot to show it!
-                        return;
-                    } else {
-                        budgetManager.addBudget(newBudget);
-                    }
                 }
 
                 refreshBudgets();
@@ -122,14 +112,22 @@ public class BudgetManagerView extends VBox {
     }
     // Separate method for creating a budget row
     private HBox createBudgetRow(Budget budget) {
+        // Status label: "left" or "OVERSPENT"
+        String status = budget.getRemaining() < 0 ? "OVERSPENT" : "left";
+        String remainingStr = String.format("%.2f", budget.getRemaining());
+
         Label budgetLabel = new Label(
                 budget.getTitle() + " | " +
-                        budget.getCategory() + " | $" +
-                        budget.getLimit() + " limit | $" +
-                        budget.getSpent() + " spent | $" +
-                        budget.getRemaining() + " left | " +
-                        budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
+                budget.getCategory() + " | $" +
+                String.format("%.2f", budget.getLimit()) + " limit | $" +
+                String.format("%.2f", budget.getSpent()) + " spent | $" +
+                remainingStr + " " + status + " | " +
+                budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
         );
+        // Red color if overspent, going to change to progress bars in the future
+        if (budget.getRemaining() < 0) {
+            budgetLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        }
 
         // Create and add Edit/Delete Buttons for each Budget
         Button editBtn = new Button("✏️");
@@ -147,7 +145,8 @@ public class BudgetManagerView extends VBox {
             limitField.setText(String.valueOf(budget.getLimit()));
             periodComboBox.setValue(budget.getPeriod());
 
-            budgetManager.removeBudget(budget); // Remove it temporarily from Map, replace after editing
+            Category originalCategory = budget.getCategory();
+            budgetManager.removeBudget(budget);
             editingBudget = budget;
         });
 
