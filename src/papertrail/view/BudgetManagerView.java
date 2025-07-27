@@ -159,7 +159,7 @@ public class BudgetManagerView extends VBox {
         return budgetRow;
     }
     public void refreshBudgets() {
-        budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per view update
+        budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per resources.view update
 
         mainBudgetListVBox.getChildren().clear();
         for (Budget budget : budgetManager.getAllBudgets()) {

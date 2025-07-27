@@ -11,6 +11,7 @@ import papertrail.model.Category;
 import papertrail.model.Receipt;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
+import papertrail.view.BudgetManagerView;
 
 import java.time.LocalDate;
 
@@ -156,7 +157,7 @@ public class ReceiptManagerView extends VBox {
 
                 // Highlight the updated budget row
                 if (budgetManagerView != null && receipt.getBudgetId() != null) {
-                    budgetManagerView.refreshBudgets(); // Ensure view is up-to-date
+                    budgetManagerView.refreshBudgets(); // Ensure resources.view is up-to-date
                     budgetManagerView.highlightBudget(receipt.getBudgetId());
                     if (budgetScene != null) {
                         primaryStage.setScene(budgetScene);

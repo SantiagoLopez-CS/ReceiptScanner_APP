@@ -1,18 +1,20 @@
 package papertrail;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import papertrail.controller.TaskManagerController;
 import papertrail.model.*;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
 import papertrail.view.BudgetManagerView;
 import papertrail.view.ReceiptManagerView;
-import papertrail.view.TaskManagerView;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 public class PaperTrailApp extends Application{
@@ -27,7 +29,7 @@ public class PaperTrailApp extends Application{
     public void start(Stage primaryStage) {
         primaryStage.setTitle("📋 PaperTrail Dashboard"); // Set Title of Stage
 
-        // Create TaskManager backend to pass into view
+        // Create TaskManager backend to pass into resources.view
         TaskManager taskManager = new TaskManager();
         BudgetManager budgetManager = new BudgetManager();
         ReceiptManager receiptManager = new ReceiptManager(budgetManager);
@@ -61,9 +63,21 @@ public class PaperTrailApp extends Application{
         // MAIN MENU SCENE
         mainMenuScene = new Scene(mainMenuLayout, 400, 300);
 
-        // TaskManager Scene
-        TaskManagerView taskManagerView = new TaskManagerView(taskManager, budgetManager, primaryStage, mainMenuScene);
-        taskManagerScene = new Scene(taskManagerView, 600, 400);
+        // Load FXML-based TaskManager scene
+        try {
+            FXMLLoader taskLoader = new FXMLLoader(getClass().getResource("/resources/view/TaskManagerView.fxml"));
+            VBox taskRoot = taskLoader.load(); // The root element of your FXML is VBox
+            // Get controller and inject logic
+            TaskManagerController taskController = taskLoader.getController();
+            taskController.setManagers(taskManager, budgetManager);
+            taskController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
+            // Create scene
+            taskManagerScene = new Scene(taskRoot, 600, 400);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return; // Or show an alert
+        }
+
 
         // BudgetManager Scene
         BudgetManagerView budgetManagerView = new BudgetManagerView(budgetManager, primaryStage, mainMenuScene);
