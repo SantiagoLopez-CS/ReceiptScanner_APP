@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:controller="papertrail.controller.ReceiptManagerController"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="10">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15" />
+    </padding>
+
+    <Label text="Receipt Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Row 1: Store name + Category -->
+    <HBox spacing="10">
+        <TextField fx:id="storeNameField" promptText="Store Name" />
+        <ComboBox fx:id="categoryComboBox" promptText="Category" />
+    </HBox>
+    <!-- Row 2: Date + Amount -->
+    <HBox spacing="10">
+        <DatePicker fx:id="dayOfPurchase" promptText="Day of Purchase" />
+        <TextField fx:id="spentField" promptText="Amount Spent" />
+    </HBox>
+    <!-- Add Button -->
+    <Button text="Add Receipt" onAction="#handleAddReceipt" />
+
+    <Separator />
+
+    <!-- Scrollable receipt list -->
+    <ScrollPane fitToWidth="true">
+        <HBox>
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15" />
+            </padding>
+            <VBox fx:id="receiptsListVBox" spacing="5" />
+        </HBox>
+    </ScrollPane>
+
+    <!-- Back Button -->
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" />
+</VBox>
