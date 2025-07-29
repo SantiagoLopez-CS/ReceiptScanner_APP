@@ -146,8 +146,12 @@ public class TaskManagerController {
             // Checkbox to toggle completion
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(task.isCompleted()); // When selected run isCompleted function
+
             // Task info label
             Label taskLabel = new Label(task.getTitle() + " - Due: " + task.getDueDate());
+            // Make the Label clickable to view whole Task: Title, descr, cat, dueDate, amount
+            taskLabel.setOnMouseClicked(event -> showTaskDetails(task));
+
             // Delete Button
             Button deleteBtn = new Button("🗑");
             deleteBtn.setOnAction(e -> {
@@ -176,5 +180,43 @@ public class TaskManagerController {
                 incompleteTasksVBOX.getChildren().add(taskRow);
             }
         }
+    }
+    /**
+     * Opens a popup dialog showing all details of the selected Task.
+     * Triggered when the user clicks on a task's label in the list.
+     */
+    private void showTaskDetails(Task task) {
+        // Create a new dialog(modal popup)
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Task Details");
+
+        // VBox to hold all the detail labels
+        VBox content = new VBox(10); // Spacing of 10px between elements
+        content.setPadding(new Insets(15)); // Padding around edges
+
+        // Create individual labels for each task attribute
+        Label titleLabel = new Label("Title: " + task.getTitle());
+        Label descrLabel = new Label("Description: " + task.getDescription());
+        Label categoryLabel = new Label("Category: " + task.getCategory());
+        Label dueLabel = new Label("Due Date: " + task.getDueDate());
+        Label amountLabel = new Label(String.format("Expected Amount: $%.2f", task.getExpectedAmount()));
+        Label statusLabel = new Label("Completed: " + (task.isCompleted() ? "✅ Yes" : "❌ No"));
+
+        // Add all labels to the dialog's content
+        content.getChildren().addAll(
+                titleLabel,
+                descrLabel,
+                categoryLabel,
+                dueLabel,
+                amountLabel,
+                statusLabel
+        );
+
+        // Set the dialog contenet and add a "Close" button
+        dialog.getDialogPane().setContent(content);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        // Show the dialog and wait until it's closed
+        dialog.showAndWait();
     }
 }
