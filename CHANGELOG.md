@@ -22,3 +22,20 @@
 - No save/load/export feature
 - No persistent storage (runtime-only data)
 
+## [v0.10.0-alpha] - 2025-07-28
+
+### Added
+- Search field for filtering receipts by store name
+- Category filter ComboBox in ReceiptManager view
+- Date filter using DatePicker
+- Clear Filter button to reset receipt filters
+
+### Changed
+- Receipt list now updates live based on active filters
+- Improved user feedback and validation in receipt input fields
+
+### Known Issues
+- BudgetManager still lacks filtering/search options
+- No CSS/styling applied yet
+- No save/load/export feature
+

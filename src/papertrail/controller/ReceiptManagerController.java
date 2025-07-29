@@ -25,20 +25,24 @@ public class ReceiptManagerController {
     private BudgetManagerController budgetManagerController;
 
     // UI elements injected from FXML
-    @FXML
-    private TextField storeNameField;
-    @FXML
-    private ComboBox<Category> categoryComboBox;
-    @FXML
-    private DatePicker dayOfPurchase;
-    @FXML
-    private TextField spentField;
-    @FXML
-    private VBox receiptsListVBox;
+    @FXML private TextField storeNameField;
+    @FXML private ComboBox<Category> categoryComboBox;
+    @FXML private DatePicker dayOfPurchase;
+    @FXML private TextField spentField;
+    @FXML private VBox receiptsListVBox;
+    // Filter fields
+    @FXML TextField filterStoreField;
+    @FXML ComboBox<Category> filterCategoryBox;
+    @FXML DatePicker filterDatePicker;
 
     @FXML
     public void initialize() {
         categoryComboBox.getItems().setAll(Category.values()); // Populate category dropdown
+        filterCategoryBox.getItems().setAll(Category.values()); // Populate category filter dropdown
+        // Add listeners to trigger filtering when inputs change
+        filterStoreField.textProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
+        filterCategoryBox.valueProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
+        filterDatePicker.valueProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
     }
 
     /*
@@ -116,11 +120,29 @@ public class ReceiptManagerController {
     public void refreshReceipts() {
         receiptsListVBox.getChildren().clear();
 
+        // Filter Fields
+        String storeFilter = filterStoreField.getText() != null ? filterStoreField.getText().trim().toLowerCase() : "";
+        Category categoryFilter = filterCategoryBox.getValue();
+        LocalDate dateFilter = filterDatePicker.getValue();
+
         for (Receipt receipt : receiptManager.getAllReceipts()) {
             if (receipt == null) continue; // Safeguard
 
-            String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
+            // Apply store name filter
+            if (!storeFilter.isEmpty() && !receipt.getStore().toLowerCase().contains(storeFilter)) {
+                continue;
+            }
+            // Apply category filter
+            if (categoryFilter != null && receipt.getCategory() != categoryFilter) {
+                continue;
+            }
+            // Apply date filter
+            if (dateFilter != null && !receipt.getDayOfPurchase().equals(dateFilter)) {
+                continue;
+            }
 
+            // Format and display matching receipt
+            String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
             Label receiptLabel = new Label(
                     receipt.getStore() + " | " +
                             receipt.getCategory() + " | " +
@@ -128,7 +150,6 @@ public class ReceiptManagerController {
                             formattedAmount + " spent"
             );
             HBox receiptRow = getHBox(receipt, receiptLabel);
-
             receiptsListVBox.getChildren().add(receiptRow);
         }
     }
@@ -171,5 +192,13 @@ public class ReceiptManagerController {
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type, message);
         alert.show();
+    }
+
+    @FXML
+    private void handleClearFilters() {
+        filterStoreField.clear();
+        filterCategoryBox.setValue(null);
+        filterDatePicker.setValue(null);
+        refreshReceipts();
     }
 }

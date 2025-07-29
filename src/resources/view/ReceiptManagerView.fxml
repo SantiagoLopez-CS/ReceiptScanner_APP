@@ -28,6 +28,17 @@
 
     <Separator />
 
+    <!-- Filter Section -->
+    <Label text="Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <HBox spacing="10">
+        <TextField fx:id="filterStoreField" promptText="Search by Store" />
+        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category" />
+    </HBox>
+    <HBox spacing="10">
+        <DatePicker fx:id="filterDatePicker" promptText="Filter by Date" />
+        <Button text="Clear Filters" onAction="#handleClearFilters" />
+    </HBox>
+
     <!-- Scrollable receipt list -->
     <ScrollPane fitToWidth="true">
         <HBox>
