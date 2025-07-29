@@ -24,21 +24,17 @@ public class TaskManagerController {
     private Runnable backToMenuCallback; // Set externally by app entry point
 
     // UI elements injected from FXML
-    @FXML
-    private TextField titleField;
-    @FXML
-    private TextField descrField;
-    @FXML
-    private ComboBox<Category> categoryBox;
-    @FXML
-    private DatePicker dueDatePicker;
-    @FXML
-    private TextField amountField;
-
-    @FXML
-    private VBox incompleteTasksVBOX;
-    @FXML
-    private VBox completedTasksVBOX;
+    @FXML private TextField titleField;
+    @FXML private TextField descrField;
+    @FXML private ComboBox<Category> categoryBox;
+    @FXML private DatePicker dueDatePicker;
+    @FXML private TextField amountField;
+    // Separate List elements
+    @FXML private VBox incompleteTasksVBOX;
+    @FXML private VBox completedTasksVBOX;
+    // Elements for searching/filtering tasks
+    @FXML private TextField searchField;
+    @FXML private ComboBox<Category> filterCategoryBox;
 
     /*
      * Called automatically after the FXML is loaded.
@@ -47,6 +43,11 @@ public class TaskManagerController {
     @FXML
     public void initialize() {
         categoryBox.getItems().setAll(Category.values()); // Populate category dropdown
+        filterCategoryBox.getItems().setAll(Category.values()); // For filtering
+
+        // Listeners to trigger filtering
+        searchField.textProperty().addListener((obs, old, newVal) -> refreshTasks());
+        filterCategoryBox.valueProperty().addListener((obs, old, newVal) -> refreshTasks());
     }
 
     /*
@@ -65,6 +66,14 @@ public class TaskManagerController {
     public void setBackToMenuCallback(Runnable callback) {
         this.backToMenuCallback = callback;
     }
+
+    @FXML
+    private void handleClearFilter() {
+        searchField.clear();
+        filterCategoryBox.setValue(null);
+        refreshTasks();
+    }
+
 
     /*
      * Triggered when user clicks "Add Task".
@@ -140,8 +149,17 @@ public class TaskManagerController {
         incompleteTasksVBOX.getChildren().clear(); // Remove old list
         completedTasksVBOX.getChildren().clear();
 
+        String keyword = searchField.getText().toLowerCase().trim();
+        Category selectedCategory = filterCategoryBox.getValue();
+
         for (Task task : taskManager.getAllTasks()) {
             if (task == null) continue; // Guard against null entries (unlikely but safe)
+
+            // === Filtering Logic ===
+            boolean matchesKeyword = keyword.isEmpty() || task.getTitle().toLowerCase().contains(keyword);
+            boolean matchesCategory = selectedCategory == null || task.getCategory() == selectedCategory;
+
+            if (!(matchesKeyword && matchesCategory)) continue;
 
             // Checkbox to toggle completion
             CheckBox checkBox = new CheckBox();
@@ -212,7 +230,7 @@ public class TaskManagerController {
                 statusLabel
         );
 
-        // Set the dialog contenet and add a "Close" button
+        // Set the dialog content and add a "Close" button
         dialog.getDialogPane().setContent(content);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
 
