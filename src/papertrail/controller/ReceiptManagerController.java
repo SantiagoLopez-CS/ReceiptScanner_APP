@@ -12,18 +12,17 @@ import papertrail.model.Category;
 import papertrail.model.Receipt;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
-import papertrail.service.TaskManager;
-import papertrail.view.BudgetManagerView;
 
 import java.time.LocalDate;
 
 public class ReceiptManagerController {
     private ReceiptManager receiptManager;
     private BudgetManager budgetManager;
-    private BudgetManagerView budgetManagerView;
     private Scene budgetScene;
     private Stage primaryStage;
     private Runnable backToMenuCallback;
+
+    private BudgetManagerController budgetManagerController;
 
     // UI elements injected from FXML
     @FXML
@@ -59,8 +58,8 @@ public class ReceiptManagerController {
         this.backToMenuCallback = callback;
     }
 
-    public void setBudgetSceneContext(BudgetManagerView budgetManagerView, Scene scene, Stage stage) {
-        this.budgetManagerView = budgetManagerView;
+    public void setBudgetSceneContext(BudgetManagerController budgetManagerController, Scene scene, Stage stage) {
+        this.budgetManagerController = budgetManagerController;
         this.budgetScene = scene;
         this.primaryStage = stage;
     }
@@ -141,9 +140,9 @@ public class ReceiptManagerController {
                 refreshReceipts();
 
                 // Highlight the updated budget row
-                if (budgetManagerView != null && receipt.getBudgetId() != null) {
-                    budgetManagerView.refreshBudgets(); // Ensure resources.view is up-to-date
-                    budgetManagerView.highlightBudget(receipt.getBudgetId());
+                if (budgetManagerController != null && receipt.getBudgetId() != null) {
+                    budgetManagerController.refreshBudgets(); // Ensure resources.view is up-to-date
+                    budgetManagerController.highlightBudget(receipt.getBudgetId());
                     if (budgetScene != null) {
                         primaryStage.setScene(budgetScene);
                     }

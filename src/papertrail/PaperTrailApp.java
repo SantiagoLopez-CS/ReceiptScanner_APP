@@ -6,13 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import papertrail.controller.BudgetManagerController;
 import papertrail.controller.ReceiptManagerController;
 import papertrail.controller.TaskManagerController;
 import papertrail.model.*;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
-import papertrail.view.BudgetManagerView;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,6 +24,8 @@ public class PaperTrailApp extends Application{
     private Scene taskManagerScene;
     private Scene budgetManagerScene;
     private Scene receiptManagerScene;
+    // Declare Controller for BudgetManager
+    private BudgetManagerController budgetController;
 
     @Override
     public void start(Stage primaryStage) {
@@ -62,6 +64,7 @@ public class PaperTrailApp extends Application{
 
         // MAIN MENU SCENE
         mainMenuScene = new Scene(mainMenuLayout, 800, 600);
+        final Scene finalMainMenuScene = mainMenuScene;
 
         // Load FXML-based TaskManager scene
         try {
@@ -70,7 +73,7 @@ public class PaperTrailApp extends Application{
             // Get controller and inject logic
             TaskManagerController taskController = taskLoader.getController();
             taskController.setManagers(taskManager, budgetManager);
-            taskController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
+            taskController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
             // Create scene
             taskManagerScene = new Scene(taskRoot, 800, 600);
         } catch (IOException e) {
@@ -80,9 +83,23 @@ public class PaperTrailApp extends Application{
 
 
         // BudgetManager Scene
-        BudgetManagerView budgetManagerView = new BudgetManagerView(budgetManager, primaryStage, mainMenuScene);
-        budgetManagerScene = new Scene(budgetManagerView, 800, 600);
+        // BudgetManager Scene (FXML-based)
+        FXMLLoader budgetLoader = new FXMLLoader(getClass().getResource("/resources/view/BudgetManagerView.fxml"));
+        VBox budgetRoot = null;
 
+        try {
+            budgetRoot = budgetLoader.load();
+            budgetController = budgetLoader.getController();
+            budgetController.setManagers(budgetManager);
+            budgetController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
+            budgetManagerScene = new Scene(budgetRoot, 800, 600);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+
+        // Receipt Manager Page
         try {
             FXMLLoader receiptLoader = new FXMLLoader(getClass().getResource("/resources/view/ReceiptManagerView.fxml"));
             VBox receiptRoot = receiptLoader.load();
@@ -90,8 +107,8 @@ public class PaperTrailApp extends Application{
 
             // Inject logic
             receiptController.setManagers(receiptManager, budgetManager);
-            receiptController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
-            receiptController.setBudgetSceneContext(budgetManagerView, budgetManagerScene, primaryStage);
+            receiptController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
+            receiptController.setBudgetSceneContext(budgetController, budgetManagerScene, primaryStage);
 
             receiptManagerScene = new Scene(receiptRoot, 800, 600);
         } catch (IOException e) {
@@ -103,7 +120,7 @@ public class PaperTrailApp extends Application{
         // Button Actions
         tasksBtn.setOnAction(actionEvent -> primaryStage.setScene(taskManagerScene));
         budgetsBtn.setOnAction(actionEvent -> {
-            budgetManagerView.refreshBudgets();
+            budgetController.refreshBudgets();
             primaryStage.setScene(budgetManagerScene);
         });
         receiptsBtn.setOnAction(actionEvent -> primaryStage.setScene(receiptManagerScene));

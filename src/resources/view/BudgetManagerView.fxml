@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.BudgetManagerView"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox fx:id="rootVBox"
+      fx:controller="papertrail.controller.BudgetManagerController"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="10">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15" />
+    </padding>
 
-</AnchorPane>
+    <Label text="Budget Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <HBox spacing="10">
+        <TextField fx:id="titleField" promptText="Title" />
+        <ComboBox fx:id="categoryComboBox" promptText="Category" />
+        <TextField fx:id="limitField" promptText="Limit" />
+        <ComboBox fx:id="periodComboBox" promptText="Period" />
+    </HBox>
+
+    <Button text="Add Budget" onAction="#handleAddBudget" />
+
+    <Separator />
+
+    <ScrollPane fitToWidth="true">
+        <HBox fx:id="budgetContentHBox" spacing="30">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15" />
+            </padding>
+            <VBox spacing="10">
+                <Label text="Budget's List" />
+                <VBox fx:id="mainBudgetListVBox" spacing="5" />
+            </VBox>
+        </HBox>
+    </ScrollPane>
+
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" />
+
+</VBox>
