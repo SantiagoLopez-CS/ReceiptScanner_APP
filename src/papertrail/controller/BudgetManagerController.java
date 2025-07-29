@@ -22,6 +22,10 @@ public class BudgetManagerController {
     @FXML private VBox mainBudgetListVBox;
     @FXML private HBox budgetContentHBox;
 
+    @FXML private TextField searchTitleField;
+    @FXML private ComboBox<Category> filterCategoryBox;
+    @FXML private Button clearFiltersBtn;
+
     private BudgetManager budgetManager;
     private Runnable backToMenuCallback;
     private Budget editingBudget = null;
@@ -35,6 +39,7 @@ public class BudgetManagerController {
         periodComboBox.getItems().addAll(BudgetPeriod.values());
 
         refreshBudgets(); // Initial Load
+        initializeFilters();
     }
 
     /*
@@ -94,8 +99,17 @@ public class BudgetManagerController {
         budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per resources.view update
         mainBudgetListVBox.getChildren().clear();
 
+        String titleFilter = searchTitleField.getText() != null
+                ? searchTitleField.getText().toLowerCase().trim() : "";
+        Category categoryFilter = filterCategoryBox.getValue();
+
         for (Budget budget : budgetManager.getAllBudgets()) {
-            mainBudgetListVBox.getChildren().add(createBudgetRow(budget));
+            boolean matchesTitle = budget.getTitle().toLowerCase().contains(titleFilter);
+            boolean matchesCategory = (categoryFilter == null || budget.getCategory() == categoryFilter);
+
+            if (matchesTitle && matchesCategory) {
+                mainBudgetListVBox.getChildren().add(createBudgetRow(budget));
+            }
         }
     }
 
@@ -163,6 +177,26 @@ public class BudgetManagerController {
         budgetRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
         budgetRow.setId(budget.getId());
         return budgetRow;
+    }
+
+    /*
+    * Method for filters initialization
+    */
+    private void initializeFilters() {
+        filterCategoryBox.getItems().add(null); // allow "no filter"
+        filterCategoryBox.getItems().addAll(Category.values());
+
+        searchTitleField.textProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
+        filterCategoryBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
+    }
+
+    /*
+    * Handle clear filters method
+    */
+    @FXML
+    private void handleClearFilters() {
+        searchTitleField.clear();
+        filterCategoryBox.setValue(null);
     }
 
     private void showError(String msg) {

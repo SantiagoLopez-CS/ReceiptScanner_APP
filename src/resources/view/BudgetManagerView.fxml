@@ -25,6 +25,13 @@
 
     <Separator />
 
+    <!-- 👇 Filter/search row -->
+    <HBox spacing="10">
+        <TextField fx:id="searchTitleField" promptText="Search by Title" />
+        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category" />
+        <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters" />
+    </HBox>
+
     <ScrollPane fitToWidth="true">
         <HBox fx:id="budgetContentHBox" spacing="30">
             <padding>

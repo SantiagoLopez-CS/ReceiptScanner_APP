@@ -39,3 +39,18 @@
 - No CSS/styling applied yet
 - No save/load/export feature
 
+## [v0.11.0-alpha] - 2025-07-28
+
+### Added
+- Search field to filter budgets by title
+- Category ComboBox to filter budgets by category
+- Clear Filter button in BudgetManager UI to reset all filters
+
+### Changed
+- Budget list now dynamically updates based on active filters
+- Improved input validation and edit mode handling for budgets
+
+### Known Issues
+- Still no CSS/styling applied
+- No save/load/export feature
+- No persistent storage (runtime-only data)
