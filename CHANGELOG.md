@@ -54,3 +54,10 @@
 - Still no CSS/styling applied
 - No save/load/export feature
 - No persistent storage (runtime-only data)
+
+## [v0.11.1-alpha] - 2025-07-29
+
+### Fixed
+- Corrected duplicate `fx:id` attributes in `BudgetManagerView.fxml`
+- Restored Add Budget button functionality
+- Cleaned up validation bindings for budget form fields

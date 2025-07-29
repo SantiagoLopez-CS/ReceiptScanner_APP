@@ -3,11 +3,9 @@ package papertrail.controller;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import papertrail.model.Budget;
 import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
@@ -25,6 +23,12 @@ public class BudgetManagerController {
     @FXML private TextField searchTitleField;
     @FXML private ComboBox<Category> filterCategoryBox;
     @FXML private Button clearFiltersBtn;
+    // Fields for error labels and addButton
+    @FXML private Label titleErrorLabel;
+    @FXML private Label categoryErrorLabel;
+    @FXML private Label limitErrorLabel;
+    @FXML private Label periodErrorLabel;
+    @FXML private Button addBudgetButton;
 
     private BudgetManager budgetManager;
     private Runnable backToMenuCallback;
@@ -40,6 +44,7 @@ public class BudgetManagerController {
 
         refreshBudgets(); // Initial Load
         initializeFilters();
+        initializeValidation();
     }
 
     /*
@@ -59,20 +64,13 @@ public class BudgetManagerController {
 
     @FXML
     private void handleAddBudget() {
+        // Double check
+        if (addBudgetButton.isDisabled()) return;
+
         String title = titleField.getText();
         Category cat = categoryComboBox.getValue();
-        double lim;
-        try {
-            lim = Double.parseDouble(limitField.getText());
-        } catch (NumberFormatException ex) {
-            showError("Please enter a valid number for 'Limit'.");
-            return; // Stop execution
-        }
+        double lim = Double.parseDouble(limitField.getText().trim());
         BudgetPeriod period = periodComboBox.getValue();
-        if (period == null) {
-            showError("Please select a time period.");
-            return;
-        }
 
         if (editingBudget != null) {
             // The budget exists, update values
@@ -188,6 +186,66 @@ public class BudgetManagerController {
 
         searchTitleField.textProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
         filterCategoryBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
+    }
+
+    /*
+    * Method to initialize validators
+    */
+    private void initializeValidation() {
+        titleField.textProperty().addListener((obs, oldVal, newVal) -> validateForm());
+        categoryComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateForm());
+        limitField.textProperty().addListener((obs, oldVal, newVal) -> validateForm());
+        periodComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateForm());
+    }
+
+
+    /*
+    * Method for input validations
+    */
+    private void validateForm() {
+        boolean isValid = true;
+
+        // Title validation
+        String title = titleField.getText().trim();
+        if (title.isEmpty()) {
+            titleErrorLabel.setVisible(true);
+            titleField.setStyle("-fx-border-color: red;");
+            isValid = false;
+        } else {
+            titleErrorLabel.setVisible(false);
+            titleField.setStyle(null);
+        }
+        // Category validation
+        if (categoryComboBox.getValue() == null) {
+            categoryErrorLabel.setVisible(true);
+            categoryComboBox.setStyle("-fx-border-color: red;");
+            isValid = false;
+        } else {
+            categoryErrorLabel.setVisible(false);
+            categoryComboBox.setStyle(null);
+        }
+        // Limit validation
+        try {
+            double limit = Double.parseDouble(limitField.getText().trim());
+            if (limit < 0) throw new NumberFormatException();
+            limitErrorLabel.setVisible(false);
+            limitField.setStyle(null);
+        } catch (NumberFormatException nfe) {
+            limitErrorLabel.setVisible(true);
+            limitField.setStyle("-fx-border-color: red;");
+            isValid = false;
+        }
+        // Period validation
+        if (periodComboBox.getValue() == null) {
+            periodErrorLabel.setVisible(true);
+            periodComboBox.setStyle("-fx-border-color: red;");
+            isValid = false;
+        } else {
+            periodErrorLabel.setVisible(false);
+            periodComboBox.setStyle(null);
+        }
+
+        addBudgetButton.setDisable(!isValid);
     }
 
     /*
