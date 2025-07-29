@@ -47,7 +47,11 @@ public class ReceiptManagerController {
     public void setManagers(ReceiptManager receiptManager, BudgetManager budgetManager) {
         this.receiptManager = receiptManager;
         this.budgetManager = budgetManager;
+
         refreshReceipts(); // Initial load of tasks
+
+        // 👇 Set default date to today
+        dayOfPurchase.setValue(LocalDate.now());
     }
 
     /*
