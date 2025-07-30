@@ -44,7 +44,6 @@ public class BudgetManagerController {
 
         refreshBudgets(); // Initial Load
         initializeFilters();
-        initializeValidation();
     }
 
     /*
@@ -64,14 +63,51 @@ public class BudgetManagerController {
 
     @FXML
     private void handleAddBudget() {
-        // Double check
-        if (addBudgetButton.isDisabled()) return;
+        titleErrorLabel.setVisible(false);
+        categoryErrorLabel.setVisible(false);
+        limitErrorLabel.setVisible(false);
+        periodErrorLabel.setVisible(false);
+
+        titleField.setStyle(null);
+        categoryComboBox.setStyle(null);
+        limitField.setStyle(null);
+        periodComboBox.setStyle(null);
 
         String title = titleField.getText();
         Category cat = categoryComboBox.getValue();
-        double lim = Double.parseDouble(limitField.getText().trim());
+        String limitStr = limitField.getText().trim();
         BudgetPeriod period = periodComboBox.getValue();
 
+        boolean valid = true;
+
+        // Action if fields are empty when add button is clicked
+        if (title.isEmpty()) {
+            titleErrorLabel.setVisible(true);
+            valid = false;
+        }
+        if (cat == null) {
+            categoryErrorLabel.setVisible(true);
+            valid = false;
+        }
+        double lim = 0.00;
+        try {
+            lim = Double.parseDouble(limitStr);
+            if (lim < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException nfe) {
+            limitErrorLabel.setVisible(true);
+            valid = false;
+        }
+        if (period == null) {
+            periodErrorLabel.setVisible(true);
+            valid = false;
+        }
+
+        if (!valid) return;
+
+
+        // ✅ If valid, proceed with creation or update
         if (editingBudget != null) {
             // The budget exists, update values
             editingBudget.setTitle(title);
@@ -86,7 +122,6 @@ public class BudgetManagerController {
         }
 
         refreshBudgets();
-
         titleField.clear();
         categoryComboBox.setValue(null);
         limitField.clear();
@@ -187,17 +222,6 @@ public class BudgetManagerController {
         searchTitleField.textProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
         filterCategoryBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
     }
-
-    /*
-    * Method to initialize validators
-    */
-    private void initializeValidation() {
-        titleField.textProperty().addListener((obs, oldVal, newVal) -> validateForm());
-        categoryComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateForm());
-        limitField.textProperty().addListener((obs, oldVal, newVal) -> validateForm());
-        periodComboBox.valueProperty().addListener((obs, oldVal, newVal) -> validateForm());
-    }
-
 
     /*
     * Method for input validations

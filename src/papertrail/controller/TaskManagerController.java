@@ -35,6 +35,12 @@ public class TaskManagerController {
     // Elements for searching/filtering tasks
     @FXML private TextField searchField;
     @FXML private ComboBox<Category> filterCategoryBox;
+    // Error Labels
+    @FXML private Label titleErrorLabel;
+    @FXML private Label descrErrorLabel;
+    @FXML private Label categoryErrorLabel;
+    @FXML private Label dueDateErrorLabel;
+    @FXML private Label amountErrorLabel;
 
     /*
      * Called automatically after the FXML is loaded.
@@ -81,26 +87,55 @@ public class TaskManagerController {
      */
     @FXML
     private void handleAddTask() {
+        // Reset error labels
+        titleErrorLabel.setVisible(false);
+        descrErrorLabel.setVisible(false);
+        categoryErrorLabel.setVisible(false);
+        dueDateErrorLabel.setVisible(false);
+        amountErrorLabel.setVisible(false);
+
         // Get input from form
         String title = titleField.getText();
         String descr = descrField.getText();
         Category cat = categoryBox.getValue();
         LocalDate due = dueDatePicker.getValue();
-        double amt;
+        String amountText = amountField.getText().trim();
 
-        if (title.isEmpty() || descr.isEmpty() || cat == null || due == null || amountField.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all fields.");
-            alert.show();
-            return;
+        boolean hasError = false;
+
+        if (title.isEmpty()) {
+            titleErrorLabel.setVisible(true);
+            hasError = true;
+        }
+        if (descr.isEmpty()) {
+            descrErrorLabel.setVisible(true);
+            hasError = true;
+        }
+        if (cat == null) {
+            categoryErrorLabel.setVisible(true);
+            hasError = true;
+        }
+        if (due == null) {
+            dueDateErrorLabel.setVisible(true);
+            hasError = true;
         }
 
-        try {
-            amt = Double.parseDouble(amountField.getText().trim());
-        } catch (NumberFormatException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter a valid number for 'Amount'.");
-            alert.show();
-            return; // Stop execution
+        double amt = 0.00;
+        if (amountText.isEmpty()) {
+            amountErrorLabel.setText("Enter a valid amount.");
+            amountErrorLabel.setVisible(true);
+            hasError = true;
+        } else {
+            try {
+                amt = Double.parseDouble(amountText);
+            } catch (NumberFormatException nfe) {
+                amountErrorLabel.setText("Enter a valid amount.");
+                amountErrorLabel.setVisible(true);
+                hasError = true;
+            }
         }
+
+        if (hasError) return; // Stop if there are any validation errors
 
         // Create and add the Task
         Task newTask = new Task(title, descr, cat, due, amt, false);

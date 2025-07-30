@@ -61,3 +61,16 @@
 - Corrected duplicate `fx:id` attributes in `BudgetManagerView.fxml`
 - Restored Add Budget button functionality
 - Cleaned up validation bindings for budget form fields
+
+## [v0.11.2-alpha] - 2025-07-29
+
+### Added
+- Error label + validation logic for all views (Task, Receipt, Budget)
+- Invalid fields now show red borders and error messages after clicking "Add"
+
+### Fixed
+- Receipt form now properly validates and adds receipts
+- Budget form no longer shows errors prematurely (only after Add is clicked)
+
+### Consistency
+- All forms now use the same UX pattern for input validation and feedback

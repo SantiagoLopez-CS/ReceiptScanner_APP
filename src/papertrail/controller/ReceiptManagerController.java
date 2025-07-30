@@ -34,6 +34,11 @@ public class ReceiptManagerController {
     @FXML TextField filterStoreField;
     @FXML ComboBox<Category> filterCategoryBox;
     @FXML DatePicker filterDatePicker;
+    // Error Labels
+    @FXML private Label storeNameErrorLabel;
+    @FXML private Label categoryErrorLabel;
+    @FXML private Label dateErrorLabel;
+    @FXML private Label spentErrorLabel;
 
     @FXML
     public void initialize() {
@@ -77,24 +82,45 @@ public class ReceiptManagerController {
         String store = storeNameField.getText().trim();
         Category cat = categoryComboBox.getValue();
         LocalDate day = dayOfPurchase.getValue();
+        String spentText = spentField.getText().trim();
+
+        boolean valid = true;
+
+        // Reset all errors
+        storeNameErrorLabel.setVisible(false);
+        categoryErrorLabel.setVisible(false);
+        dateErrorLabel.setVisible(false);
+        spentErrorLabel.setVisible(false);
+
         // Validation
-        if (store.isEmpty() || cat == null || day == null) {
-            showAlert(Alert.AlertType.ERROR, "Please complete all fields.");
-            return;
+        if (store.isEmpty()) {
+            storeNameErrorLabel.setVisible(true);
+            valid = false;
+        }
+        if (cat == null) {
+            categoryErrorLabel.setVisible(true);
+            valid = false;
+        }
+        if (day == null) {
+            dateErrorLabel.setVisible(true);
+            valid = false;
         }
 
-        double spent;
+        double spent = 0.00;
         try {
-            spent = Double.parseDouble(spentField.getText());
-        } catch (NumberFormatException ex) {
-            showAlert(Alert.AlertType.ERROR, "Please enter a valid number for 'Amount Spent'.");
-            return; // Stop execution
+            spent = Double.parseDouble(spentText);
+            if (spent < 0.00) throw new NumberFormatException(); // Prevent Negative input values
+        } catch (NumberFormatException nfe) {
+            spentErrorLabel.setVisible(true);
+            valid = false;
         }
+
+        if (!valid) return;
+
         // Create and Store
         String budgetId = findMatchingBudgetId(cat);
         if (budgetId == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No matching budget found for selected category.");
-            alert.show();
+            showAlert(Alert.AlertType.ERROR, "No matching budget found for selected category.");
             return;
         }
         Receipt newReceipt = new Receipt(store, cat, day, spent, budgetId);

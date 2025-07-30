@@ -15,13 +15,29 @@
 
     <!-- Row 1: Store name + Category -->
     <HBox spacing="10">
-        <TextField fx:id="storeNameField" promptText="Store Name" />
-        <ComboBox fx:id="categoryComboBox" promptText="Category" />
+        <!-- Store Name -->
+        <VBox spacing="2">
+            <TextField fx:id="storeNameField" promptText="Store Name" />
+            <Label fx:id="storeNameErrorLabel" text="Store Name required." textFill="red" visible="false" />
+        </VBox>
+        <!-- Category -->
+        <VBox spacing="2">
+            <ComboBox fx:id="categoryComboBox" promptText="Category" />
+            <Label fx:id="categoryErrorLabel" text="Please select a category." textFill="red" visible="false" />
+        </VBox>
     </HBox>
     <!-- Row 2: Date + Amount -->
     <HBox spacing="10">
-        <DatePicker fx:id="dayOfPurchase" promptText="Day of Purchase" />
-        <TextField fx:id="spentField" promptText="Amount Spent" />
+        <!-- Date Picker -->
+        <VBox spacing="2">
+            <DatePicker fx:id="dayOfPurchase" promptText="Day of Purchase" />
+            <Label fx:id="dateErrorLabel" text="Date is required." textFill="red" visible="false" />
+        </VBox>
+        <!-- Spent Amount -->
+        <VBox spacing="2">
+            <TextField fx:id="spentField" promptText="Amount Spent" />
+            <Label fx:id="spentErrorLabel" text="Enter a valid amount." textFill="red" visible="false" />
+        </VBox>
     </HBox>
     <!-- Add Button -->
     <Button text="Add Receipt" onAction="#handleAddReceipt" />
