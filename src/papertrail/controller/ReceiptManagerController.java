@@ -182,6 +182,9 @@ public class ReceiptManagerController {
 
     private HBox getHBox(Receipt receipt, Label receiptLabel) {
         Button deleteBtn = new Button("🗑");
+        Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this Receipt");
+        Tooltip.install(deleteBtn, deleteBtnTooltip);
+        deleteBtn.setTooltip(deleteBtnTooltip);
         deleteBtn.setOnAction(actionEvent -> {
             // Implement removeReceipt boolean return
             boolean removed = receiptManager.removeReceipt(receipt.getId());

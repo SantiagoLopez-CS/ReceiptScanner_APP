@@ -17,12 +17,20 @@
     <HBox spacing="10">
         <!-- Store Name -->
         <VBox spacing="2">
-            <TextField fx:id="storeNameField" promptText="Store Name" />
+            <TextField fx:id="storeNameField" promptText="Store Name">
+                <tooltip>
+                    <Tooltip text="Enter the store name of the receipt (e.g., Autozone)" />
+                </tooltip>
+            </TextField>
             <Label fx:id="storeNameErrorLabel" text="Store Name required." textFill="red" visible="false" />
         </VBox>
         <!-- Category -->
         <VBox spacing="2">
-            <ComboBox fx:id="categoryComboBox" promptText="Category" />
+            <ComboBox fx:id="categoryComboBox" promptText="Category">
+                <tooltip>
+                    <Tooltip text="Select a category for this receipt (e.g., Transportation)" />
+                </tooltip>
+            </ComboBox>
             <Label fx:id="categoryErrorLabel" text="Please select a category." textFill="red" visible="false" />
         </VBox>
     </HBox>
@@ -30,29 +38,57 @@
     <HBox spacing="10">
         <!-- Date Picker -->
         <VBox spacing="2">
-            <DatePicker fx:id="dayOfPurchase" promptText="Day of Purchase" />
+            <DatePicker fx:id="dayOfPurchase" promptText="Day of Purchase">
+                <tooltip>
+                    <Tooltip text="Select the date of purchase for this receipt" />
+                </tooltip>
+            </DatePicker>
             <Label fx:id="dateErrorLabel" text="Date is required." textFill="red" visible="false" />
         </VBox>
         <!-- Spent Amount -->
         <VBox spacing="2">
-            <TextField fx:id="spentField" promptText="Amount Spent" />
+            <TextField fx:id="spentField" promptText="Amount Spent">
+                <tooltip>
+                    <Tooltip text="Enter the total amount spent at store" />
+                </tooltip>
+            </TextField>
             <Label fx:id="spentErrorLabel" text="Enter a valid amount." textFill="red" visible="false" />
         </VBox>
     </HBox>
     <!-- Add Button -->
-    <Button text="Add Receipt" onAction="#handleAddReceipt" />
+    <Button text="Add Receipt" onAction="#handleAddReceipt">
+        <tooltip>
+            <Tooltip text="Save a new receipt using the fields above" />
+        </tooltip>
+    </Button>
 
     <Separator />
 
     <!-- Filter Section -->
     <Label text="Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
     <HBox spacing="10">
-        <TextField fx:id="filterStoreField" promptText="Search by Store" />
-        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category" />
+        <TextField fx:id="filterStoreField" promptText="Search by Store">
+            <tooltip>
+                <Tooltip text="Type to filter receipts by store name" />
+            </tooltip>
+        </TextField>
+        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category">
+            <tooltip>
+                <Tooltip text="Select a category to narrow down receipt list" />
+            </tooltip>
+        </ComboBox>
     </HBox>
     <HBox spacing="10">
-        <DatePicker fx:id="filterDatePicker" promptText="Filter by Date" />
-        <Button text="Clear Filters" onAction="#handleClearFilters" />
+        <DatePicker fx:id="filterDatePicker" promptText="Filter by Date">
+            <tooltip>
+                <Tooltip text="Select a date to view all receipts of that day" />
+            </tooltip>
+        </DatePicker>
+        <Button text="Clear Filters" onAction="#handleClearFilters">
+            <tooltip>
+                <Tooltip text="Clear all filter and search fields" />
+            </tooltip>
+        </Button>
     </HBox>
 
     <!-- Scrollable receipt list -->
@@ -66,5 +102,9 @@
     </ScrollPane>
 
     <!-- Back Button -->
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" />
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+        <tooltip>
+            <Tooltip text="Return to the main PaperTrail menu" />
+        </tooltip>
+    </Button>
 </VBox>

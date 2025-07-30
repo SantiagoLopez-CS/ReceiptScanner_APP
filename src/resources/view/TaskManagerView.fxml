@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootVBox"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="papertrail.controller.TaskManagerController"
+      spacing="10">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15" />
+    </padding>
+
+    <Label text="Task Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Row 1: Title + Description -->
+    <HBox spacing="10">
+        <!-- Title -->
+        <VBox spacing="2">
+            <TextField fx:id="titleField" promptText="Title">
+                <tooltip>
+                    <Tooltip text="Enter a name for your Task (e.g., Concert Tickets)" />
+                </tooltip>
+            </TextField>
+            <Label fx:id="titleErrorLabel" text="Title is required." textFill="red" visible="false" />
+        </VBox>
+        <!-- Description -->
+        <VBox spacing="2">
+            <TextField fx:id="descrField" promptText="Description">
+                <tooltip>
+                    <Tooltip text="Enter a description for your Task (e.g., Save money for XXXTENTACION concert)" />
+                </tooltip>
+            </TextField>
+            <Label fx:id="descrErrorLabel" text="Description is required." textFill="red" visible="false" />
+        </VBox>
+    </HBox>
+
+    <!-- Row 2: Category + Due Date + Amount -->
+    <HBox spacing="10">
+        <!-- Category -->
+        <VBox spacing="2">
+            <ComboBox fx:id="categoryBox" promptText="Category">
+                <tooltip>
+                    <Tooltip text="Select a category that fits this task" />
+                </tooltip>
+            </ComboBox>
+            <Label fx:id="categoryErrorLabel" text="Select a category." textFill="red" visible="false" />
+        </VBox>
+        <!-- Due Date -->
+        <VBox spacing="2">
+            <DatePicker fx:id="dueDatePicker" promptText="Due Date">
+                <tooltip>
+                    <Tooltip text="Pick a date this task needs to be done by" />
+                </tooltip>
+            </DatePicker>
+            <Label fx:id="dueDateErrorLabel" text="Pick a due date." textFill="red" visible="false" />
+        </VBox>
+        <!-- Expected Amount -->
+        <VBox spacing="2">
+            <TextField fx:id="amountField" promptText="Expected Amount">
+                <tooltip>
+                    <Tooltip text="Enter the amount of money this task needs" />
+                </tooltip>
+            </TextField>
+            <Label fx:id="amountErrorLabel" text="Enter a valid amount." textFill="red" visible="false" />
+        </VBox>
+    </HBox>
+
+    <Button text="Add Task" onAction="#handleAddTask">
+        <tooltip>
+            <Tooltip text="Save a new task using the fields above" />
+        </tooltip>
+    </Button>
+
+    <Separator />
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Search by title...">
+            <tooltip>
+                <Tooltip text="Type to filter Task's by their title" />
+            </tooltip>
+        </TextField>
+        <ComboBox fx:id="filterCategoryBox" promptText="Filter by category">
+            <tooltip>
+                <Tooltip text="Select a category to narrow down list of task's" />
+            </tooltip>
+        </ComboBox>
+        <Button text="Clear Filter" onAction="#handleClearFilter">
+            <tooltip>
+                <Tooltip text="Clear all search and filter fields" />
+            </tooltip>
+        </Button>
+    </HBox>
+
+    <ScrollPane fitToWidth="true">
+        <HBox fx:id="taskListHBox" spacing="30">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <VBox spacing="10">
+                <Label text="Incomplete Tasks" />
+                <VBox fx:id="incompleteTasksVBOX" spacing="5" />
+            </VBox>
+            <VBox spacing="10">
+                <Label text="✅ Completed Tasks" />
+                <VBox fx:id="completedTasksVBOX" spacing="5"/>
+            </VBox>
+        </HBox>
+    </ScrollPane>
+
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+        <tooltip>
+            <Tooltip text="Return to the main PaperTrail menu" />
+        </tooltip>
+    </Button>
+
+</VBox>

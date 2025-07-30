@@ -207,6 +207,9 @@ public class TaskManagerController {
 
             // Delete Button
             Button deleteBtn = new Button("🗑");
+            Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this task");
+            Tooltip.install(deleteBtn, deleteBtnTooltip);
+            deleteBtn.setTooltip(deleteBtnTooltip);
             deleteBtn.setOnAction(e -> {
                 taskManager.removeTask(task.getId());
                 refreshTasks(); // Refresh list after deletion

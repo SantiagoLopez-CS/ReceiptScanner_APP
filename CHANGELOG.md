@@ -74,3 +74,20 @@
 
 ### Consistency
 - All forms now use the same UX pattern for input validation and feedback
+
+## [v0.11.3-alpha] - 2025-07-29
+
+### Added
+- Tooltips for all input fields, buttons, filters, and controls in all views (Budget, Receipt, & Task)
+- Tooltip support for dynamically created Edit and Delete buttons in all controller classes (Budget, Receipt, and Task)
+
+### UX Improvements
+- Users now receive helpful guidance when hovering over form fields and controls across all views
+
+### Consistency
+- All three manager views (Budget, Receipt, Task) now follow a unified tooltip standard
+
+### Known Issues
+- No CSS/styling applied yet
+- No save/load/export feature
+- No persistent storage (runtime-only data)

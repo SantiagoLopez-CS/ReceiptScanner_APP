@@ -186,7 +186,14 @@ public class BudgetManagerController {
 
         // Create and add Edit/Delete Buttons for each Budget
         Button editBtn = new Button("✏️");
+        Tooltip editTooltip = new Tooltip("Edit this budget's details");
+        Tooltip.install(editBtn, editTooltip);
+        editBtn.setTooltip(editTooltip);
+
         Button deleteBtn = new Button("🗑");
+        Tooltip deleteTooltip = new Tooltip("Remove this budget permanently");
+        Tooltip.install(deleteBtn, deleteTooltip);
+        deleteBtn.setTooltip(deleteTooltip);
 
         deleteBtn.setOnAction(actionEvent -> {
             budgetManager.removeBudget(budget);

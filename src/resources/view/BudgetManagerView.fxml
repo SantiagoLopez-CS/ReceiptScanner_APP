@@ -20,12 +20,20 @@
         <HBox spacing="5">
             <!-- Title Input -->
             <VBox spacing="2">
-                <TextField fx:id="titleField" promptText="Title" />
+                <TextField fx:id="titleField" promptText="Title">
+                    <tooltip>
+                        <Tooltip text="Enter a name for your budget(e.g., Groceries)" />
+                    </tooltip>
+                </TextField>
                 <Label fx:id="titleErrorLabel" text="Title is required." textFill="red" visible="false" />
             </VBox>
             <!-- Category Input -->
             <VBox spacing="2">
-                <ComboBox fx:id="categoryComboBox" promptText="Category" />
+                <ComboBox fx:id="categoryComboBox" promptText="Category">
+                    <tooltip>
+                        <Tooltip text="Select a category that fits this budget" />
+                    </tooltip>
+                </ComboBox>
                 <Label fx:id="categoryErrorLabel" text="Category is required." textFill="red" visible="false" />
             </VBox>
         </HBox>
@@ -33,26 +41,50 @@
         <HBox spacing="5">
             <!-- Limit Input -->
             <VBox spacing="2">
-                <TextField fx:id="limitField" promptText="Limit" />
+                <TextField fx:id="limitField" promptText="Limit">
+                    <tooltip>
+                        <Tooltip text="Set a maximum spending amount (e.g., 200.00)" />
+                    </tooltip>
+                </TextField>
                 <Label fx:id="limitErrorLabel" text="Cash limit required." textFill="red" visible="false" />
             </VBox>
             <!-- Period Input -->
             <VBox spacing="2">
-                <ComboBox fx:id="periodComboBox" promptText="Period" />
+                <ComboBox fx:id="periodComboBox" promptText="Period">
+                    <tooltip>
+                        <Tooltip text="Choose how often this budget resets (e.g., Monthly)" />
+                    </tooltip>
+                </ComboBox>
                 <Label fx:id="periodErrorLabel" text="Select a Time Period." textFill="red" visible="false" />
             </VBox>
         </HBox>
     </VBox>
 
-    <Button fx:id="addBudgetButton" text="Add Budget" onAction="#handleAddBudget" />
+    <Button fx:id="addBudgetButton" text="Add Budget" onAction="#handleAddBudget">
+        <tooltip>
+            <Tooltip text="Save a new budget using the fields above" />
+        </tooltip>
+    </Button>
 
     <Separator />
 
     <!-- 👇 Filter/search row -->
     <HBox spacing="10">
-        <TextField fx:id="searchTitleField" promptText="Search by Title" />
-        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category" />
-        <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters" />
+        <TextField fx:id="searchTitleField" promptText="Search by Title">
+            <tooltip>
+                <Tooltip text="Type to filter budgets by their title" />
+            </tooltip>
+        </TextField>
+        <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category">
+            <tooltip>
+                <Tooltip text="Select a category to narrow down the budget list" />
+            </tooltip>
+        </ComboBox>
+        <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters">
+            <tooltip>
+                <Tooltip text="Reset all budget search and filter options" />
+            </tooltip>
+        </Button>
     </HBox>
 
     <ScrollPane fitToWidth="true">
@@ -67,6 +99,10 @@
         </HBox>
     </ScrollPane>
 
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" />
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+        <tooltip>
+            <Tooltip text="Return to the main PaperTrail menu" />
+        </tooltip>
+    </Button>
 
 </VBox>
