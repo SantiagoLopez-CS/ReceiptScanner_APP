@@ -5,20 +5,11 @@ This file outlines the planned versions and feature milestones for the PaperTrai
 ---
 
 ## ✅ CURRENT VERSION
-- **v0.11.3-alpha**: All views (Task, Budget, Receipt) now follow unified UX with validation and tooltips
+- **v0.12.0-alpha**: Full UX polish across all views with tooltips, validation, filtering, empty list labels, and CSS styles
 
 ---
 
 ## 🔜 UPCOMING ALPHA RELEASES
-
-### 🔹 v0.12.0-alpha — UX Polish & Consistency
-- Add tooltips for:
-    - Budget edit fields
-    - Receipt edit fields
-    - Task edit fields
-- Add tooltips for "Back to Menu" button in all views
-- Apply consistent spacing/padding/margins across all views
-- Optional: Add hover/active button styling for visual feedback
 
 ### 🔹 v0.13.0-alpha — Search & Sorting
 - Add ability to sort tasks by due date or category
@@ -53,9 +44,9 @@ This file outlines the planned versions and feature milestones for the PaperTrai
 
 ### 🔹 v0.19.0-alpha — Summary & Analytics View
 - Add new Dashboard/Summary page:
-    - Show total monthly spending
-    - Show budget progress (spent vs limit)
-    - Show pie chart of categories (optional)
+  - Show total monthly spending
+  - Show budget progress (spent vs limit)
+  - Show pie chart of categories (optional)
 - Export summary data to file
 
 ---
