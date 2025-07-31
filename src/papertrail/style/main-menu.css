@@ -1,0 +1,36 @@
+#mainMenuVBox {
+    -fx-background-color: #f9f9f9;
+}
+
+/* Base button styling */
+.button {
+    -fx-padding: 10 20;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* Task button (green) */
+.task-button {
+    -fx-background-color: #4CAF50;
+}
+.task-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Receipt button (blue) */
+.receipt-button {
+    -fx-background-color: #2196F3;
+}
+.receipt-button:hover {
+    -fx-background-color: #1976D2;
+}
+
+/* Budget button (orange) */
+.budget-button {
+    -fx-background-color: #FF9800;
+}
+.budget-button:hover {
+    -fx-background-color: #FB8C00;
+}

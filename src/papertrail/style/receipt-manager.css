@@ -1,0 +1,135 @@
+.root {
+    -fx-background-color: #f9f9f9;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 13px;
+}
+
+.label.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.label.section-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Error Labels */
+.label.error {
+    -fx-text-fill: red;
+    -fx-font-size: 11px;
+    -fx-padding: 2 0 0 4;
+}
+
+/* Form Fields */
+.text-field,
+.combo-box,
+.date-picker {
+    -fx-pref-width: 180px;
+    -fx-padding: 4;
+}
+
+/* General Button Styling */
+.button {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12 6 12;
+    -fx-background-radius: 6;
+}
+
+.button:hover {
+    -fx-background-color: #2563eb;
+}
+
+.button:pressed {
+    -fx-background-color: #1d4ed8;
+}
+
+/* Specific Button Styles */
+.button.add-button {
+    -fx-background-color: #10b981;
+}
+
+.button.add-button:hover {
+    -fx-background-color: #059669;
+}
+
+.button.add-button:pressed {
+    -fx-background-color: #047857;
+}
+
+.button.clear-button {
+    -fx-background-color: #f59e0b;
+}
+
+.button.clear-button:hover {
+    -fx-background-color: #d97706;
+}
+
+.button.clear-button:pressed {
+    -fx-background-color: #b45309;
+}
+
+.button.back-button {
+    -fx-background-color: #6b7280;
+}
+
+.button.back-button:hover {
+    -fx-background-color: #4b5563;
+}
+
+.button.back-button:pressed {
+    -fx-background-color: #374151;
+}
+
+/* Delete Button for Receipts */
+.button.delete-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button.delete-button:hover {
+    -fx-text-fill: #dc2626;
+}
+
+/* Scrollable List */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+}
+
+#receiptsListVBox {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-spacing: 6;
+}
+
+/* Receipt Row */
+.hbox {
+    -fx-alignment: center-left;
+}
+
+.receipt-row {
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 8;
+    -fx-spacing: 10;
+    -fx-background-color: #ffffff;
+}
+
+/* Empty List Label */
+#emptyReceiptsLabel {
+    -fx-text-fill: #9ca3af;
+    -fx-font-style: italic;
+    -fx-padding: 10 0 0 5;
+}

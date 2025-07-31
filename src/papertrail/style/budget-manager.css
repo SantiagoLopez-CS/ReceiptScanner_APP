@@ -1,0 +1,131 @@
+/* Root layout */
+.budget-view-root {
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-background-color: #f4f4f4;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Form fields */
+.text-field, .combo-box {
+    -fx-pref-width: 250px;
+    -fx-font-size: 13px;
+    -fx-padding: 4;
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* Error labels */
+#errorLabel,
+#titleErrorLabel,
+#limitErrorLabel,
+#categoryErrorLabel,
+#periodErrorLabel {
+    -fx-text-fill: red;
+    -fx-font-size: 11px;
+    -fx-padding: 2 0 0 4;
+    -fx-font-weight: normal;
+}
+
+/* ScrollPane wrapper section */
+.scroll-section {
+    -fx-background: #ffffff;
+    -fx-padding: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+}
+
+/* Each budget row */
+#mainBudgetListVBox .budget-row {
+    -fx-padding: 6px;
+    -fx-spacing: 10px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-color: #fcfcfc;
+}
+
+/* Optional: Shared class if created in Java */
+.budget-row {
+    -fx-padding: 6px;
+    -fx-spacing: 10px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-color: #fcfcfc;
+}
+
+/* Empty list label */
+#emptyBudgetLabel {
+    -fx-text-fill: #9ca3af;
+    -fx-font-style: italic;
+    -fx-padding: 5 0 0 5;
+}
+
+/* Add Button */
+.add-button {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+}
+
+.add-button:hover {
+    -fx-background-color: #059669;
+}
+
+.add-button:pressed {
+    -fx-background-color: #047857;
+}
+
+/* Clear Filters Button */
+.clear-button {
+    -fx-background-color: #f59e0b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+}
+
+.clear-button:hover {
+    -fx-background-color: #d97706;
+}
+
+.clear-button:pressed {
+    -fx-background-color: #b45309;
+}
+
+/* Back Button */
+.back-button {
+    -fx-background-color: #6b7280;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+}
+
+.back-button:hover {
+    -fx-background-color: #4b5563;
+}
+
+.back-button:pressed {
+    -fx-background-color: #374151;
+}
+
+/* Delete Button */
+.button.delete-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button.delete-button:hover {
+    -fx-text-fill: #dc2626;
+}

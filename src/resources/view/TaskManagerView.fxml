@@ -113,7 +113,7 @@
     <!-- Section Label -->
     <Label text="📋 Task List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-    <ScrollPane fitToWidth="true">
+    <ScrollPane fitToWidth="true" styleClass="scroll-section">
         <HBox fx:id="taskListHBox" spacing="30" minHeight="200">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>

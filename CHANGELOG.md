@@ -91,3 +91,33 @@
 - No CSS/styling applied yet
 - No save/load/export feature
 - No persistent storage (runtime-only data)
+
+## [v0.12.0-alpha] - 2025-07-31
+
+### Added
+- TaskManagerView: 'Show Completed Tasks' toggle with filter logic
+- TaskManagerView: Tooltip descriptions for all form fields and buttons
+- TaskManagerView: Search bar + category filter with live updates
+- TaskManagerView: Validation logic and error labels for all required fields
+- TaskManagerView: "No tasks to show" label when list is empty or filtered out
+- TaskManagerView: CSS styling via `task-manager.css` for layout, buttons, errors
+
+- ReceiptManagerView: Tooltips for all form fields and buttons
+- ReceiptManagerView: Search bar + category filter with live updates
+- ReceiptManagerView: Validation logic and error labels for all required fields
+- ReceiptManagerView: "No receipts to show" label when list is empty or filtered out
+- ReceiptManagerView: CSS styling via `receipt-manager.css`
+- ReceiptManagerController: Refreshes BudgetView after deletion
+
+- BudgetManagerView: Tooltips for all form fields and buttons
+- BudgetManagerView: Search bar + category filter with live updates
+- BudgetManagerView: Validation logic and error labels for all required fields
+- BudgetManagerView: "No budgets to show" label when list is empty or filtered out
+- BudgetManagerView: CSS styling via `budget-manager.css`
+
+- MainMenuView: CSS button styling via `main-menu.css`, with custom styles per button
+
+### Changed
+- PaperTrailApp.java: Switched all manager views to use FXML layout and controllers
+- PaperTrailApp.java: Injects test data for Task, Receipt, and Budget for UX verification
+

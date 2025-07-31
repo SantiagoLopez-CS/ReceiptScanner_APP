@@ -3,10 +3,10 @@ package papertrail;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import papertrail.controller.BudgetManagerController;
+import papertrail.controller.MainMenuController;
 import papertrail.controller.ReceiptManagerController;
 import papertrail.controller.TaskManagerController;
 import papertrail.model.*;
@@ -51,20 +51,26 @@ public class PaperTrailApp extends Application{
         receiptManager.addReceipt(new Receipt("Clash", Category.ENTERTAINMENT, LocalDate.now().minusDays(5), 5.99, budgetManager.getAllBudgets().get(2).getId()));
 
 
-        // MAIN MENU LAYOUT
-        VBox mainMenuLayout = new VBox(15); // 15px space between elements
-        mainMenuLayout.setStyle("-fx-padding: 20; -fx-alignment: center;"); // Styling for VBox elements
+        // Load Main Menu FXML
+        FXMLLoader mainMenuLoader = new FXMLLoader(getClass().getResource("/resources/view/MainMenuView.fxml"));
+        VBox mainMenuRoot = null;
 
-        // Buttons for each feature
-        Button tasksBtn = new Button("Task Manager");
-        Button receiptsBtn = new Button("Receipt Manager ");
-        Button budgetsBtn = new Button("Budget Manager");
-        // Add buttons to Main scene
-        mainMenuLayout.getChildren().addAll(tasksBtn, receiptsBtn, budgetsBtn);
+        try {
+            mainMenuRoot = mainMenuLoader.load();
+            MainMenuController mainMenuController = mainMenuLoader.getController();
 
-        // MAIN MENU SCENE
-        mainMenuScene = new Scene(mainMenuLayout, 800, 600);
-        final Scene finalMainMenuScene = mainMenuScene;
+            mainMenuController.setOnTaskPressed(() -> primaryStage.setScene(taskManagerScene));
+            mainMenuController.setOnReceiptPressed(() -> primaryStage.setScene(receiptManagerScene));
+            mainMenuController.setOnBudgetPressed(() -> {
+                budgetController.refreshBudgets();
+                primaryStage.setScene(budgetManagerScene);
+            });
+
+            mainMenuScene = new Scene(mainMenuRoot, 800, 600);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        }
 
         // Load FXML-based TaskManager scene
         try {
@@ -73,14 +79,13 @@ public class PaperTrailApp extends Application{
             // Get controller and inject logic
             TaskManagerController taskController = taskLoader.getController();
             taskController.setManagers(taskManager, budgetManager);
-            taskController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
+            taskController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
             // Create scene
             taskManagerScene = new Scene(taskRoot, 800, 600);
         } catch (IOException e) {
             e.printStackTrace();
             return; // Or show an alert
         }
-
 
         // BudgetManager Scene
         // BudgetManager Scene (FXML-based)
@@ -91,7 +96,7 @@ public class PaperTrailApp extends Application{
             budgetRoot = budgetLoader.load();
             budgetController = budgetLoader.getController();
             budgetController.setManagers(budgetManager);
-            budgetController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
+            budgetController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
             budgetManagerScene = new Scene(budgetRoot, 800, 600);
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +112,7 @@ public class PaperTrailApp extends Application{
 
             // Inject logic
             receiptController.setManagers(receiptManager, budgetManager);
-            receiptController.setBackToMenuCallback(() -> primaryStage.setScene(finalMainMenuScene));
+            receiptController.setBackToMenuCallback(() -> primaryStage.setScene(mainMenuScene));
             receiptController.setBudgetSceneContext(budgetController, budgetManagerScene, primaryStage);
 
             receiptManagerScene = new Scene(receiptRoot, 800, 600);
@@ -115,15 +120,6 @@ public class PaperTrailApp extends Application{
             e.printStackTrace();
             return;
         }
-
-
-        // Button Actions
-        tasksBtn.setOnAction(actionEvent -> primaryStage.setScene(taskManagerScene));
-        budgetsBtn.setOnAction(actionEvent -> {
-            budgetController.refreshBudgets();
-            primaryStage.setScene(budgetManagerScene);
-        });
-        receiptsBtn.setOnAction(actionEvent -> primaryStage.setScene(receiptManagerScene));
 
         // Set the Scene and show(make visible)
         primaryStage.setScene(mainMenuScene);

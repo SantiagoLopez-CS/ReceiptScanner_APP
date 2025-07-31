@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="mainMenuVBox"
+      fx:controller="papertrail.controller.MainMenuController"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@/papertrail/style/main-menu.css"
+      alignment="CENTER"
+      spacing="20" minWidth="600" minHeight="600">
+
+    <padding>
+        <Insets top="30" bottom="30" left="30" right="30" />
+    </padding>
+
+    <Label text="📋 Welcome to PaperTrail" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <Button fx:id="taskBtn" text="📝 Task Manager" styleClass="task-button" />
+    <Button fx:id="receiptBtn" text="🧾 Receipt Manager" styleClass="receipt-button" />
+    <Button fx:id="budgetBtn" text="💰 Budget Manager" styleClass="budget-button" />
+
+</VBox>

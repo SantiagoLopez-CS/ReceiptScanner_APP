@@ -4,14 +4,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox fx:controller="papertrail.controller.ReceiptManagerController"
+<!-- Root VBox custom CSS -->
+<VBox fx:id="rootVBox"
+      fx:controller="papertrail.controller.ReceiptManagerController"
       xmlns:fx="http://javafx.com/fxml"
-      spacing="10">
+      stylesheets="@/papertrail/style/receipt-manager.css"
+      spacing="10" minWidth="600" minHeight="600">
+
     <padding>
         <Insets top="15" right="15" bottom="15" left="15" />
     </padding>
 
+    <!-- Main Header -->
     <Label text="Receipt Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Section Label: Add new Receipt -->
+    <Label text="➕ Add a New Receipt" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Row 1: Store name + Category -->
     <HBox spacing="10">
@@ -22,7 +30,8 @@
                     <Tooltip text="Enter the store name of the receipt (e.g., Autozone)" />
                 </tooltip>
             </TextField>
-            <Label fx:id="storeNameErrorLabel" text="Store Name required." textFill="red" visible="false" />
+            <!-- Error Label -->
+            <Label fx:id="storeNameErrorLabel" text="Store Name required." textFill="red" visible="false" styleClass="error-label"/>
         </VBox>
         <!-- Category -->
         <VBox spacing="2">
@@ -31,7 +40,8 @@
                     <Tooltip text="Select a category for this receipt (e.g., Transportation)" />
                 </tooltip>
             </ComboBox>
-            <Label fx:id="categoryErrorLabel" text="Please select a category." textFill="red" visible="false" />
+            <!-- Error Label -->
+            <Label fx:id="categoryErrorLabel" text="Please select a category." textFill="red" visible="false" styleClass="error-label"/>
         </VBox>
     </HBox>
     <!-- Row 2: Date + Amount -->
@@ -43,7 +53,8 @@
                     <Tooltip text="Select the date of purchase for this receipt" />
                 </tooltip>
             </DatePicker>
-            <Label fx:id="dateErrorLabel" text="Date is required." textFill="red" visible="false" />
+            <!-- Error Label -->
+            <Label fx:id="dateErrorLabel" text="Date is required." textFill="red" visible="false" styleClass="error-label"/>
         </VBox>
         <!-- Spent Amount -->
         <VBox spacing="2">
@@ -52,11 +63,12 @@
                     <Tooltip text="Enter the total amount spent at store" />
                 </tooltip>
             </TextField>
-            <Label fx:id="spentErrorLabel" text="Enter a valid amount." textFill="red" visible="false" />
+            <!-- Error Label -->
+            <Label fx:id="spentErrorLabel" text="Enter a valid amount." textFill="red" visible="false" styleClass="error-label" />
         </VBox>
     </HBox>
     <!-- Add Button -->
-    <Button text="Add Receipt" onAction="#handleAddReceipt">
+    <Button text="Add Receipt" onAction="#handleAddReceipt" styleClass="add-button">
         <tooltip>
             <Tooltip text="Save a new receipt using the fields above" />
         </tooltip>
@@ -64,9 +76,11 @@
 
     <Separator />
 
+    <!-- Section Label: Search/Filter -->
+    <Label text="🔍 Search / Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
     <!-- Filter Section -->
-    <Label text="Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-    <HBox spacing="10">
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="filterStoreField" promptText="Search by Store">
             <tooltip>
                 <Tooltip text="Type to filter receipts by store name" />
@@ -78,31 +92,38 @@
             </tooltip>
         </ComboBox>
     </HBox>
-    <HBox spacing="10">
+    <!-- Search/Filter Row 2 -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <DatePicker fx:id="filterDatePicker" promptText="Filter by Date">
             <tooltip>
                 <Tooltip text="Select a date to view all receipts of that day" />
             </tooltip>
         </DatePicker>
-        <Button text="Clear Filters" onAction="#handleClearFilters">
+        <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="clear-button">
             <tooltip>
                 <Tooltip text="Clear all filter and search fields" />
             </tooltip>
         </Button>
     </HBox>
 
+    <!-- Section Label: Receipt List -->
+    <Label text="📋 Receipt List" style="-fx-font-size: 14px: -fx-font-weight: bold;" />
+
     <!-- Scrollable receipt list -->
-    <ScrollPane fitToWidth="true">
+    <ScrollPane fitToWidth="true" styleClass="scroll-section">
         <HBox>
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15" />
             </padding>
-            <VBox fx:id="receiptsListVBox" spacing="5" />
+            <VBox fx:id="receiptsListVBox" spacing="5">
+                <!-- Shown if no receipts match or exist -->
+                <Label fx:id="emptyReceiptsLabel" text="No receipts found." visible="false" />
+            </VBox>
         </HBox>
     </ScrollPane>
 
     <!-- Back Button -->
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>

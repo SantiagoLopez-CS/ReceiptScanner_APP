@@ -1,41 +1,48 @@
-/* task-manager.css */
-
-/* Root container styles */
+/* Root layout */
 .task-view-root {
     -fx-padding: 20px;
     -fx-spacing: 15px;
     -fx-background-color: #f4f4f4;
+    -fx-font-family: "Segoe UI", sans-serif;
 }
 
 /* Form fields */
-.task-form-field {
+.text-field, .combo-box, .date-picker {
     -fx-pref-width: 250px;
     -fx-font-size: 13px;
+    -fx-padding: 4;
 }
 
-/* Labels (including error labels) */
-.task-label {
+/* Labels */
+.label {
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
-.task-error-label {
+/* Error labels */
+#titleErrorLabel,
+#descrErrorLabel,
+#categoryErrorLabel,
+#dueDateErrorLabel,
+#amountErrorLabel {
     -fx-text-fill: red;
     -fx-font-size: 11px;
-    -fx-padding: 2px;
+    -fx-padding: 2 0 0 4;
+    -fx-font-weight: normal;
 }
 
-/* Task list sections */
-.task-list-section {
-    -fx-background-color: #ffffff;
-    -fx-padding: 10px;
+/* ScrollPane wrapper section */
+.scroll-section {
+    -fx-background: #ffffff;
+    -fx-padding: 10;
     -fx-border-color: #dcdcdc;
     -fx-border-width: 1;
     -fx-border-radius: 4;
-    -fx-spacing: 10px;
 }
 
-/* Task item row */
-.task-item-row {
+/* Each task row box (incomplete/completed) */
+#incompleteTasksVBOX .task-row,
+#completedTasksVBOX .task-row {
     -fx-padding: 6px;
     -fx-spacing: 10px;
     -fx-border-color: lightgray;
@@ -44,25 +51,81 @@
     -fx-background-color: #fcfcfc;
 }
 
-/* Buttons */
-.task-button {
-    -fx-background-color: #4CAF50;
+/* Empty list labels */
+#emptyIncompleteLabel,
+#emptyCompletedLabel {
+    -fx-text-fill: #9ca3af;
+    -fx-font-style: italic;
+    -fx-padding: 5 0 0 5;
+}
+
+/* Button styles */
+.add-button {
+    -fx-background-color: #10b981;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-padding: 5px 10px;
-    -fx-background-radius: 4;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
 }
 
-.task-button:hover {
-    -fx-background-color: #45a049;
+.add-button:hover {
+    -fx-background-color: #059669;
 }
 
-/* Delete button specifically */
-.task-delete-button {
-    -fx-background-color: #e53935;
+.add-button:pressed {
+    -fx-background-color: #047857;
+}
+
+/* Delete Button for Receipts */
+.button.delete-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button.delete-button:hover {
+    -fx-text-fill: #dc2626;
+}
+
+.clear-button {
+    -fx-background-color: #f59e0b;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
 }
 
-.task-delete-button:hover {
-    -fx-background-color: #c62828;
+.clear-button:hover {
+    -fx-background-color: #d97706;
+}
+
+.clear-button:pressed {
+    -fx-background-color: #b45309;
+}
+
+.back-button {
+    -fx-background-color: #6b7280;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+}
+
+.back-button:hover {
+    -fx-background-color: #4b5563;
+}
+
+.back-button:pressed {
+    -fx-background-color: #374151;
+}
+
+/* Optional: Shared task-row class for added clarity when you build them in Java code */
+.task-row {
+    -fx-padding: 6px;
+    -fx-spacing: 10px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-color: #fcfcfc;
 }

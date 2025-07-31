@@ -30,6 +30,8 @@ public class BudgetManagerController {
     @FXML private Label periodErrorLabel;
     @FXML private Button addBudgetButton;
 
+    @FXML private Label emptyBudgetLabel;
+
     private BudgetManager budgetManager;
     private Runnable backToMenuCallback;
     private Budget editingBudget = null;
@@ -131,10 +133,13 @@ public class BudgetManagerController {
     public void refreshBudgets() {
         budgetManager.resetAllBudgetsIfNeeded(); // Only reset once per resources.view update
         mainBudgetListVBox.getChildren().clear();
+        emptyBudgetLabel.setVisible(false);
 
         String titleFilter = searchTitleField.getText() != null
                 ? searchTitleField.getText().toLowerCase().trim() : "";
         Category categoryFilter = filterCategoryBox.getValue();
+
+        boolean anyMatch = false;
 
         for (Budget budget : budgetManager.getAllBudgets()) {
             boolean matchesTitle = budget.getTitle().toLowerCase().contains(titleFilter);
@@ -142,7 +147,12 @@ public class BudgetManagerController {
 
             if (matchesTitle && matchesCategory) {
                 mainBudgetListVBox.getChildren().add(createBudgetRow(budget));
+                anyMatch = true;
             }
+        }
+        // Show Label if no budgets are created
+        if (!anyMatch) {
+            emptyBudgetLabel.setVisible(true);
         }
     }
 
@@ -189,11 +199,13 @@ public class BudgetManagerController {
         Tooltip editTooltip = new Tooltip("Edit this budget's details");
         Tooltip.install(editBtn, editTooltip);
         editBtn.setTooltip(editTooltip);
+        editBtn.getStyleClass().add("edit-button");
 
         Button deleteBtn = new Button("🗑");
         Tooltip deleteTooltip = new Tooltip("Remove this budget permanently");
         Tooltip.install(deleteBtn, deleteTooltip);
         deleteBtn.setTooltip(deleteTooltip);
+        deleteBtn.getStyleClass().add("delete-button");
 
         deleteBtn.setOnAction(actionEvent -> {
             budgetManager.removeBudget(budget);
@@ -214,6 +226,7 @@ public class BudgetManagerController {
         VBox budgetInfoBox = new VBox(2, budgetLabel, resetLabel);
         HBox budgetRow = new HBox(10, budgetInfoBox, editBtn, deleteBtn);
         budgetRow.setPadding(new Insets(5));
+        budgetRow.getStyleClass().add("budget-item-row");
         budgetRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
         budgetRow.setId(budget.getId());
         return budgetRow;
@@ -231,65 +244,11 @@ public class BudgetManagerController {
     }
 
     /*
-    * Method for input validations
-    */
-    private void validateForm() {
-        boolean isValid = true;
-
-        // Title validation
-        String title = titleField.getText().trim();
-        if (title.isEmpty()) {
-            titleErrorLabel.setVisible(true);
-            titleField.setStyle("-fx-border-color: red;");
-            isValid = false;
-        } else {
-            titleErrorLabel.setVisible(false);
-            titleField.setStyle(null);
-        }
-        // Category validation
-        if (categoryComboBox.getValue() == null) {
-            categoryErrorLabel.setVisible(true);
-            categoryComboBox.setStyle("-fx-border-color: red;");
-            isValid = false;
-        } else {
-            categoryErrorLabel.setVisible(false);
-            categoryComboBox.setStyle(null);
-        }
-        // Limit validation
-        try {
-            double limit = Double.parseDouble(limitField.getText().trim());
-            if (limit < 0) throw new NumberFormatException();
-            limitErrorLabel.setVisible(false);
-            limitField.setStyle(null);
-        } catch (NumberFormatException nfe) {
-            limitErrorLabel.setVisible(true);
-            limitField.setStyle("-fx-border-color: red;");
-            isValid = false;
-        }
-        // Period validation
-        if (periodComboBox.getValue() == null) {
-            periodErrorLabel.setVisible(true);
-            periodComboBox.setStyle("-fx-border-color: red;");
-            isValid = false;
-        } else {
-            periodErrorLabel.setVisible(false);
-            periodComboBox.setStyle(null);
-        }
-
-        addBudgetButton.setDisable(!isValid);
-    }
-
-    /*
     * Handle clear filters method
     */
     @FXML
     private void handleClearFilters() {
         searchTitleField.clear();
         filterCategoryBox.setValue(null);
-    }
-
-    private void showError(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
-        alert.show();
     }
 }

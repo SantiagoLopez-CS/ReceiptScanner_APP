@@ -7,12 +7,18 @@
 <VBox fx:id="rootVBox"
       fx:controller="papertrail.controller.BudgetManagerController"
       xmlns:fx="http://javafx.com/fxml"
-      spacing="10">
+      stylesheets="@/papertrail/style/budget-manager.css"
+      styleClass="budget-view-root"
+      spacing="10" minWidth="600" minHeight="600">
     <padding>
         <Insets top="15" right="15" bottom="15" left="15" />
     </padding>
 
+    <!-- Title -->
     <Label text="Budget Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- ➕ Add Section -->
+    <Label text="➕ Add a New Budget" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- New input section with validation messages -->
     <VBox spacing="10">
@@ -25,7 +31,7 @@
                         <Tooltip text="Enter a name for your budget(e.g., Groceries)" />
                     </tooltip>
                 </TextField>
-                <Label fx:id="titleErrorLabel" text="Title is required." textFill="red" visible="false" />
+                <Label fx:id="titleErrorLabel" text="Title is required." textFill="red" visible="false" styleClass="error-label"/>
             </VBox>
             <!-- Category Input -->
             <VBox spacing="2">
@@ -34,7 +40,7 @@
                         <Tooltip text="Select a category that fits this budget" />
                     </tooltip>
                 </ComboBox>
-                <Label fx:id="categoryErrorLabel" text="Category is required." textFill="red" visible="false" />
+                <Label fx:id="categoryErrorLabel" text="Category is required." textFill="red" visible="false" styleClass="error-label"/>
             </VBox>
         </HBox>
         <!-- Second Row -->
@@ -46,7 +52,7 @@
                         <Tooltip text="Set a maximum spending amount (e.g., 200.00)" />
                     </tooltip>
                 </TextField>
-                <Label fx:id="limitErrorLabel" text="Cash limit required." textFill="red" visible="false" />
+                <Label fx:id="limitErrorLabel" text="Cash limit required." textFill="red" visible="false" styleClass="error-label"/>
             </VBox>
             <!-- Period Input -->
             <VBox spacing="2">
@@ -55,12 +61,13 @@
                         <Tooltip text="Choose how often this budget resets (e.g., Monthly)" />
                     </tooltip>
                 </ComboBox>
-                <Label fx:id="periodErrorLabel" text="Select a Time Period." textFill="red" visible="false" />
+                <Label fx:id="periodErrorLabel" text="Select a Time Period." textFill="red" visible="false" styleClass="error-label"/>
             </VBox>
         </HBox>
     </VBox>
 
-    <Button fx:id="addBudgetButton" text="Add Budget" onAction="#handleAddBudget">
+    <!-- Add Button -->
+    <Button fx:id="addBudgetButton" text="Add Budget" onAction="#handleAddBudget" styleClass="add-button">
         <tooltip>
             <Tooltip text="Save a new budget using the fields above" />
         </tooltip>
@@ -68,8 +75,11 @@
 
     <Separator />
 
+    <!-- Search/Filter Section -->
+    <Label text="🔍 Search / Filter Budgets" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
     <!-- 👇 Filter/search row -->
-    <HBox spacing="10">
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="searchTitleField" promptText="Search by Title">
             <tooltip>
                 <Tooltip text="Type to filter budgets by their title" />
@@ -80,14 +90,17 @@
                 <Tooltip text="Select a category to narrow down the budget list" />
             </tooltip>
         </ComboBox>
-        <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters">
+        <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters" styleClass="clear-button">
             <tooltip>
                 <Tooltip text="Reset all budget search and filter options" />
             </tooltip>
         </Button>
     </HBox>
 
-    <ScrollPane fitToWidth="true">
+    <!-- Budget List -->
+    <Label text="📋 Budget List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+    <ScrollPane fitToWidth="true" styleClass="scroll-section">
         <HBox fx:id="budgetContentHBox" spacing="30">
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15" />
@@ -96,10 +109,12 @@
                 <Label text="Budget's List" />
                 <VBox fx:id="mainBudgetListVBox" spacing="5" />
             </VBox>
+            <Label fx:id="emptyBudgetLabel" text="No budgets available." visible="false" styleClass="empty-label" />
         </HBox>
     </ScrollPane>
 
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu">
+    <!-- Back Button -->
+    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>

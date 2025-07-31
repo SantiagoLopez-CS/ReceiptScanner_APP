@@ -39,6 +39,8 @@ public class ReceiptManagerController {
     @FXML private Label categoryErrorLabel;
     @FXML private Label dateErrorLabel;
     @FXML private Label spentErrorLabel;
+    // Empty List Label
+    @FXML private Label emptyReceiptsLabel;
 
     @FXML
     public void initialize() {
@@ -145,6 +147,7 @@ public class ReceiptManagerController {
 
     public void refreshReceipts() {
         receiptsListVBox.getChildren().clear();
+        int matches = 0;
 
         // Filter Fields
         String storeFilter = filterStoreField.getText() != null ? filterStoreField.getText().trim().toLowerCase() : "";
@@ -171,17 +174,21 @@ public class ReceiptManagerController {
             String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
             Label receiptLabel = new Label(
                     receipt.getStore() + " | " +
-                            receipt.getCategory() + " | " +
-                            receipt.getDayOfPurchase() + " | " +
-                            formattedAmount + " spent"
+                    receipt.getCategory() + " | " +
+                    receipt.getDayOfPurchase() + " | " +
+                    formattedAmount + " spent"
             );
             HBox receiptRow = getHBox(receipt, receiptLabel);
             receiptsListVBox.getChildren().add(receiptRow);
+            matches++;
         }
+        // Set Empty List label visible when 0 Receipts are read
+        emptyReceiptsLabel.setVisible(matches == 0);
     }
 
     private HBox getHBox(Receipt receipt, Label receiptLabel) {
         Button deleteBtn = new Button("🗑");
+        deleteBtn.getStyleClass().add("delete-button");
         Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this Receipt");
         Tooltip.install(deleteBtn, deleteBtnTooltip);
         deleteBtn.setTooltip(deleteBtnTooltip);
@@ -206,7 +213,7 @@ public class ReceiptManagerController {
 
         HBox receiptRow = new HBox(10, receiptLabel, deleteBtn);
         receiptRow.setPadding(new Insets(5));
-        receiptRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        receiptRow.getStyleClass().add("receipt-row");
         return receiptRow;
     }
     private String findMatchingBudgetId(Category category) {

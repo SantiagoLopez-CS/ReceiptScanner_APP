@@ -225,6 +225,7 @@ public class TaskManagerController {
 
             // Delete Button
             Button deleteBtn = new Button("🗑");
+            deleteBtn.getStyleClass().add("delete-button");
             Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this task");
             Tooltip.install(deleteBtn, deleteBtnTooltip);
             deleteBtn.setTooltip(deleteBtnTooltip);
@@ -232,7 +233,6 @@ public class TaskManagerController {
                 taskManager.removeTask(task.getId());
                 refreshTasks(); // Refresh list after deletion
             });
-            deleteBtn.getStyleClass().add("delete-button");
 
             // Handle Checkbox toggle
             checkBox.setOnAction(e -> {
