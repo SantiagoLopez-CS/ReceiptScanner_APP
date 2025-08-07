@@ -5,22 +5,24 @@ This file outlines the planned versions and feature milestones for the PaperTrai
 ---
 
 ## ✅ CURRENT VERSION
-- **v0.12.0-alpha**: Full UX polish across all views with tooltips, validation, filtering, empty list labels, and CSS styles
+- **v0.13.0-alpha**: Sorting logic and empty list labels for all views, hover effects, and settings menu stub
 
 ---
 
 ## 🔜 UPCOMING ALPHA RELEASES
 
-### 🔹 v0.13.0-alpha — Search & Sorting
-- Add ability to sort tasks by due date or category
-- Add ability to sort receipts by date, amount, or category
-- Add ability to sort budgets by title or remaining budget
-- Add a settings menu (stub) for future sort/display preferences
+### 🔹 v0.13.0-alpha — Sorting & Settings Stub
+- Add sorting logic to all views (Task, Receipt, Budget)
+- Add ComboBox sort selectors to all manager UIs
+- Add hover effects to list items for UX clarity
+- Add "No items to show" message when lists are empty
+- Add a settings button (stub only) to main menu for future configuration options
 
 ### 🔹 v0.14.0-alpha — Data Persistence: Budget & Task
 - Implement file-based storage and loading of `Budget` objects
 - Implement file-based storage and loading of `Task` objects
-- Ensure UUIDs, limits, dates, and categories persist correctly
+- Implement file-based storage and loading of `Receipt` objects
+- Ensure UUIDs, limits, amounts, dates, and categories persist correctly
 
 ### 🔹 v0.15.0-alpha — Data Persistence: Receipt
 - Add persistent storage and loading for `Receipt` objects
@@ -36,6 +38,7 @@ This file outlines the planned versions and feature milestones for the PaperTrai
 - Add basic support for uploading receipt images
 - Integrate with OCR API (e.g., Google Vision, Tesseract)
 - Extract amount, date, and category hints from receipt image
+- Add clickable receipt items that open a dialog (will display image after OCR integration)
 
 ### 🔹 v0.18.0-alpha — UI Styling Pass (CSS)
 - Create global stylesheet and apply to all views

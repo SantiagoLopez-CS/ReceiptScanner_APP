@@ -80,14 +80,22 @@
 
     <!-- 👇 Filter/search row -->
     <HBox spacing="10" alignment="CENTER_LEFT">
+        <!-- Title Search Option -->
         <TextField fx:id="searchTitleField" promptText="Search by Title">
             <tooltip>
                 <Tooltip text="Type to filter budgets by their title" />
             </tooltip>
         </TextField>
+        <!-- Category Filter Option -->
         <ComboBox fx:id="filterCategoryBox" promptText="Filter by Category">
             <tooltip>
                 <Tooltip text="Select a category to narrow down the budget list" />
+            </tooltip>
+        </ComboBox>
+        <!-- Sort List Options -->
+        <ComboBox fx:id="sortComboBox" promptText="Sort By">
+            <tooltip>
+                <Tooltip text="Sort budgets by title, limit, or reset period" />
             </tooltip>
         </ComboBox>
         <Button fx:id="clearFiltersBtn" text="Clear Filters" onAction="#handleClearFilters" styleClass="clear-button">

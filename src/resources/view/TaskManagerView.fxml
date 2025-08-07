@@ -4,6 +4,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox fx:id="rootVBox"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="papertrail.controller.TaskManagerController"
@@ -108,6 +110,24 @@
                 <Tooltip text="Toggle to show or hide completed tasks" />
             </tooltip>
         </CheckBox>
+    </HBox>
+
+    <!-- Sort Options -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Sort By:" />
+        <ComboBox fx:id="sortComboBox" promptText="Select sort option" styleClass="sort-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Title (A-Z)" />
+                    <String fx:value="Due Date (Soonest First)" />
+                    <String fx:value="Amount (Lowest First)" />
+                    <String fx:value="Amount (Highest First)" />
+                </FXCollections>
+            </items>
+            <tooltip>
+                <Tooltip text="Choose how to sort the task list" />
+            </tooltip>
+        </ComboBox>
     </HBox>
 
     <!-- Section Label -->

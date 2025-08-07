@@ -12,6 +12,9 @@ import papertrail.service.BudgetManager;
 import papertrail.service.TaskManager;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Controller for the Task Manager resources.view.
@@ -47,6 +50,8 @@ public class TaskManagerController {
     // Empty list labels
     @FXML private Label emptyCompletedLabel;
     @FXML private Label emptyIncompleteLabel;
+    // Sort List
+    @FXML private ComboBox<String> sortComboBox;
 
     /*
      * Called automatically after the FXML is loaded.
@@ -61,6 +66,16 @@ public class TaskManagerController {
         searchField.textProperty().addListener((obs, old, newVal) -> refreshTasks());
         filterCategoryBox.valueProperty().addListener((obs, old, newVal) -> refreshTasks());
         showCompletedCheckBox.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> refreshTasks());
+
+        // Sort List
+        sortComboBox.getItems().clear(); // <-- Prevent duplicates
+        sortComboBox.getItems().addAll(
+                "Title (A-Z)",
+                "Due Date (Soonest First)",
+                "Amount (Lowest First)",
+                "Amount (Highest First)");
+        sortComboBox.getSelectionModel().selectFirst(); // Default to Due Date
+        sortComboBox.valueProperty().addListener((obs, old, newVal) -> refreshTasks());
     }
 
     /*
@@ -188,8 +203,9 @@ public class TaskManagerController {
      * Called after adding, deleting, or updating a task.
      */
     private void refreshTasks() {
-        incompleteTasksVBOX.getChildren().clear(); // Remove old list
-        completedTasksVBOX.getChildren().clear();
+        // Remove all children except the empty label, so empty label stays in the VBox
+        incompleteTasksVBOX.getChildren().removeIf(node -> node != emptyIncompleteLabel);
+        completedTasksVBOX.getChildren().removeIf(node -> node != emptyCompletedLabel);
 
         String keyword = searchField.getText().toLowerCase().trim();
         Category selectedCategory = filterCategoryBox.getValue();
@@ -198,18 +214,32 @@ public class TaskManagerController {
         int incompleteCount = 0;
         int completedCount = 0;
 
-        for (Task task : taskManager.getAllTasks()) {
-            if (task == null) continue; // Guard against null entries (unlikely but safe)
+        // === Filtering ===
+        List<Task> filtered = taskManager.getAllTasks().stream()
+                .filter(task -> task != null)
+                .filter(task -> {
+                    // === Filtering Logic ===
+                    boolean matchesKeyword = keyword.isEmpty() || task.getTitle().toLowerCase().contains(keyword);
+                    boolean matchesCategory = selectedCategory == null || task.getCategory() == selectedCategory;
+                    return matchesKeyword && matchesCategory;
+                })
+                .collect(Collectors.toList());
 
-            // === Filtering Logic ===
-            boolean matchesKeyword = keyword.isEmpty() || task.getTitle().toLowerCase().contains(keyword);
-            boolean matchesCategory = selectedCategory == null || task.getCategory() == selectedCategory;
+        // === Sorting ===
+        String sortBy = sortComboBox.getValue();
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Title (A-Z)" -> filtered.sort(Comparator.comparing(Task::getTitle, String.CASE_INSENSITIVE_ORDER));
+                case "Due Date (Soonest First)" -> filtered.sort(Comparator.comparing(Task::getDueDate));
+                case "Amount (Lowest First)" -> filtered.sort(Comparator.comparing(Task::getExpectedAmount));
+                case "Amount (Highest First)" -> filtered.sort(Comparator.comparing(Task::getExpectedAmount).reversed());
+            }
+        }
 
-            if (!(matchesKeyword && matchesCategory)) continue;
-
-            // Skip completed tasks if user unchecked the box
+        // === Build UI Rows ===
+        for (Task task : filtered) {
             if (task.isCompleted() && !showCompleted) {
-                continue;
+                continue; // Skip if completed tasks are hidden
             }
 
             // Checkbox to toggle completion
@@ -246,9 +276,11 @@ public class TaskManagerController {
 
             // Arrange in a row (HBox)
             HBox taskRow = new HBox(10, checkBox, taskLabel, deleteBtn);
-            taskRow.setPadding(new Insets(5));
-            taskRow.setStyle(" -fx-border-color: lightgray; -fx-border-width: 1;");
             taskRow.getStyleClass().add("task-row");
+            // Ensure background fills and hover color shows
+            taskRow.setMinWidth(Region.USE_PREF_SIZE);
+            HBox.setHgrow(taskRow, Priority.ALWAYS);
+            taskLabel.setWrapText(true);
 
             if (task.isCompleted()) {
                 completedTasksVBOX.getChildren().add(taskRow);
@@ -258,9 +290,10 @@ public class TaskManagerController {
                 incompleteCount++;
             }
         }
+
         // Show or hide empty state Labels
         emptyIncompleteLabel.setVisible(incompleteCount == 0);
-        emptyCompletedLabel.setVisible(completedCount == 0);
+        emptyCompletedLabel.setVisible(showCompleted && completedCount == 0);
     }
     /**
      * Opens a popup dialog showing all details of the selected Task.
@@ -274,6 +307,7 @@ public class TaskManagerController {
         // VBox to hold all the detail labels
         VBox content = new VBox(10); // Spacing of 10px between elements
         content.setPadding(new Insets(15)); // Padding around edges
+        content.getStyleClass().add("task-item");
 
         // Create individual labels for each task attribute
         Label titleLabel = new Label("Title: " + task.getTitle());

@@ -121,3 +121,15 @@
 - PaperTrailApp.java: Switched all manager views to use FXML layout and controllers
 - PaperTrailApp.java: Injects test data for Task, Receipt, and Budget for UX verification
 
+## [v0.13.0-alpha] - 2025-08-07
+
+### Added
+- Sorting support for Task, Receipt, and Budget views
+- ComboBox UI for selecting sort mode in each manager view
+- Hover effect styling for all manager list items
+- "No items to show" label logic generalized for all views
+- Settings button (stub only) added to Main Menu for future preferences
+
+### Changed
+- Updated `main-menu.css` to style Task, Receipt, Budget, and Settings buttons
+- Refactored view controllers to support empty list labels and sorting

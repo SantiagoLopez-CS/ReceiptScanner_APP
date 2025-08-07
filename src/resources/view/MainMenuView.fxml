@@ -20,5 +20,6 @@
     <Button fx:id="taskBtn" text="📝 Task Manager" styleClass="task-button" />
     <Button fx:id="receiptBtn" text="🧾 Receipt Manager" styleClass="receipt-button" />
     <Button fx:id="budgetBtn" text="💰 Budget Manager" styleClass="budget-button" />
+    <Button fx:id="settingsBtn" text="⚙️ Settings (Coming Soon)" styleClass="settings-button" />
 
 </VBox>

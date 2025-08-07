@@ -5,6 +5,8 @@
 <?import javafx.geometry.Insets?>
 
 <!-- Root VBox custom CSS -->
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox fx:id="rootVBox"
       fx:controller="papertrail.controller.ReceiptManagerController"
       xmlns:fx="http://javafx.com/fxml"
@@ -106,8 +108,27 @@
         </Button>
     </HBox>
 
+    <!-- Sort Options -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Sort By:" />
+        <ComboBox fx:id="sortComboBox" promptText="Select sort option" styleClass="sort-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Title (A-Z)" />
+                    <String fx:value="Purchase Date (Oldest First)" />
+                    <String fx:value="Purchase Date (Soonest First)" />
+                    <String fx:value="Amount (Lowest First)" />
+                    <String fx:value="Amount (Highest First)" />
+                </FXCollections>
+            </items>
+            <tooltip>
+                <Tooltip text="Choose how to sort the receipt list" />
+            </tooltip>
+        </ComboBox>
+    </HBox>
+
     <!-- Section Label: Receipt List -->
-    <Label text="📋 Receipt List" style="-fx-font-size: 14px: -fx-font-weight: bold;" />
+    <Label text="📋 Receipt List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Scrollable receipt list -->
     <ScrollPane fitToWidth="true" styleClass="scroll-section">
@@ -115,10 +136,10 @@
             <padding>
                 <Insets top="15" right="15" bottom="15" left="15" />
             </padding>
-            <VBox fx:id="receiptsListVBox" spacing="5">
-                <!-- Shown if no receipts match or exist -->
-                <Label fx:id="emptyReceiptsLabel" text="No receipts found." visible="false" />
+            <VBox fx:id="receiptsListVBox" spacing="10">
             </VBox>
+            <!-- Shown if no receipts match or exist -->
+            <Label fx:id="emptyReceiptsLabel" text="No receipts found." visible="false" />
         </HBox>
     </ScrollPane>
 

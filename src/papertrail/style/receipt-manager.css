@@ -127,9 +127,15 @@
     -fx-background-color: #ffffff;
 }
 
+.receipt-row:hover {
+    -fx-background-color: #f3f4f6; /* light gray hover effect */
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
 /* Empty List Label */
 #emptyReceiptsLabel {
     -fx-text-fill: #9ca3af;
     -fx-font-style: italic;
-    -fx-padding: 10 0 0 5;
+    -fx-padding: 5 0 0 5;
 }

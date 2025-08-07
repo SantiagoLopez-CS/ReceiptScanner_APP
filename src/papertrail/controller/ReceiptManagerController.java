@@ -14,6 +14,9 @@ import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class ReceiptManagerController {
     private ReceiptManager receiptManager;
@@ -41,6 +44,8 @@ public class ReceiptManagerController {
     @FXML private Label spentErrorLabel;
     // Empty List Label
     @FXML private Label emptyReceiptsLabel;
+    // Sort Box
+    @FXML private ComboBox<String> sortComboBox;
 
     @FXML
     public void initialize() {
@@ -50,6 +55,18 @@ public class ReceiptManagerController {
         filterStoreField.textProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
         filterCategoryBox.valueProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
         filterDatePicker.valueProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
+
+        sortComboBox.getItems().clear(); // Prevent duplicates
+        sortComboBox.getItems().addAll(
+                "Title (A-Z)",
+                "Purchase Date (Oldest First)",
+                "Purchase Date (Soonest First)",
+                "Amount (Lowest First)",
+                "Amount (Highest First)"
+        );
+        sortComboBox.getSelectionModel().selectFirst();
+        // Add listener to sortComboBox to refresh receipts on sort change
+        sortComboBox.valueProperty().addListener((observableValue, oldValue, newValue) -> refreshReceipts());
     }
 
     /*
@@ -60,7 +77,6 @@ public class ReceiptManagerController {
         this.budgetManager = budgetManager;
 
         refreshReceipts(); // Initial load of tasks
-
         // 👇 Set default date to today
         dayOfPurchase.setValue(LocalDate.now());
     }
@@ -147,43 +163,62 @@ public class ReceiptManagerController {
 
     public void refreshReceipts() {
         receiptsListVBox.getChildren().clear();
-        int matches = 0;
 
         // Filter Fields
         String storeFilter = filterStoreField.getText() != null ? filterStoreField.getText().trim().toLowerCase() : "";
         Category categoryFilter = filterCategoryBox.getValue();
         LocalDate dateFilter = filterDatePicker.getValue();
 
-        for (Receipt receipt : receiptManager.getAllReceipts()) {
-            if (receipt == null) continue; // Safeguard
+        // Create a copy of all the receipts for filtering and sorting
+        List<Receipt> filteredReceipts = new ArrayList<>(receiptManager.getAllReceipts());
 
+        emptyReceiptsLabel.setVisible(true); // 🔍 See if it ever shows
+
+        // Apply filters
+        filteredReceipts.removeIf(receipt -> {
+            if (receipt == null) return true; // Safeguard
             // Apply store name filter
             if (!storeFilter.isEmpty() && !receipt.getStore().toLowerCase().contains(storeFilter)) {
-                continue;
+                return true;
             }
             // Apply category filter
             if (categoryFilter != null && receipt.getCategory() != categoryFilter) {
-                continue;
+                return true;
             }
             // Apply date filter
-            if (dateFilter != null && !receipt.getDayOfPurchase().equals(dateFilter)) {
-                continue;
-            }
+             return dateFilter != null && !receipt.getDayOfPurchase().equals(dateFilter);
+        });
 
-            // Format and display matching receipt
-            String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
-            Label receiptLabel = new Label(
-                    receipt.getStore() + " | " +
-                    receipt.getCategory() + " | " +
-                    receipt.getDayOfPurchase() + " | " +
-                    formattedAmount + " spent"
-            );
-            HBox receiptRow = getHBox(receipt, receiptLabel);
-            receiptsListVBox.getChildren().add(receiptRow);
-            matches++;
+        // Apply sorting
+        String sortBy = sortComboBox.getValue();
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Title (A-Z)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getStore, String.CASE_INSENSITIVE_ORDER));
+                case "Purchase Date (Oldest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase));
+                case "Purchase Date (Soonest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase).reversed());
+                case "Amount (Lowest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent));
+                case "Amount (Highest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent).reversed());
+            }
         }
-        // Set Empty List label visible when 0 Receipts are read
-        emptyReceiptsLabel.setVisible(matches == 0);
+
+        if (filteredReceipts.isEmpty()) {
+            receiptsListVBox.getChildren().add(emptyReceiptsLabel);
+        } else {
+            for (Receipt receipt : filteredReceipts) {
+                // Format and display matching receipt
+                String formattedAmount = String.format("$%.2f", receipt.getAmountSpent());
+                Label receiptLabel = new Label(
+                        receipt.getStore() + " | " +
+                                receipt.getCategory() + " | " +
+                                receipt.getDayOfPurchase() + " | " +
+                                formattedAmount + " spent"
+                );
+                HBox receiptRow = getHBox(receipt, receiptLabel);
+                receiptsListVBox.getChildren().add(receiptRow);
+            }
+        }
+        // Show or hide empty label
+        emptyReceiptsLabel.setVisible(filteredReceipts.isEmpty());
     }
 
     private HBox getHBox(Receipt receipt, Label receiptLabel) {
@@ -201,7 +236,7 @@ public class ReceiptManagerController {
                 refreshReceipts();
 
                 // Highlight the updated budget row
-                if (budgetManagerController != null && receipt.getBudgetId() != null) {
+                if (budgetManagerController != null && receipt.getBudgetId() != null && budgetManager.getBudgetById(receipt.getBudgetId()).isOverspent()) {
                     budgetManagerController.refreshBudgets(); // Ensure resources.view is up-to-date
                     budgetManagerController.highlightBudget(receipt.getBudgetId());
                     if (budgetScene != null) {
@@ -214,6 +249,19 @@ public class ReceiptManagerController {
         HBox receiptRow = new HBox(10, receiptLabel, deleteBtn);
         receiptRow.setPadding(new Insets(5));
         receiptRow.getStyleClass().add("receipt-row");
+
+        // Click Event
+        receiptRow.setOnMouseClicked(mouseEvent -> {
+            Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+            dialog.setTitle("Receipt Details");
+            dialog.setHeaderText("Preview Coming Soon");
+            dialog.setContentText(
+                    "Receipt ID: " + receipt.getId() + "\n\n" +
+                    "Image preview will be available in a future update."
+            );
+            dialog.showAndWait();
+        });
+
         return receiptRow;
     }
     private String findMatchingBudgetId(Category category) {

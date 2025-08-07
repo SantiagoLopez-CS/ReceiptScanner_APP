@@ -11,6 +11,10 @@ import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class BudgetManagerController {
     @FXML private TextField titleField;
     @FXML private ComboBox<Category> categoryComboBox;
@@ -31,7 +35,8 @@ public class BudgetManagerController {
     @FXML private Button addBudgetButton;
 
     @FXML private Label emptyBudgetLabel;
-
+    // Sorting Box
+    @FXML private ComboBox<String> sortComboBox;
     private BudgetManager budgetManager;
     private Runnable backToMenuCallback;
     private Budget editingBudget = null;
@@ -141,7 +146,20 @@ public class BudgetManagerController {
 
         boolean anyMatch = false;
 
-        for (Budget budget : budgetManager.getAllBudgets()) {
+        List<Budget> sorted = new ArrayList<>(budgetManager.getAllBudgets());
+
+        String sortOption = sortComboBox.getValue();
+        if ("Title (A-Z)".equals(sortOption)) {
+            sorted.sort(Comparator.comparing(budget -> budget.getTitle().toLowerCase()));
+        } else if ("Limit (Lowest First)".equals(sortOption)) {
+            sorted.sort(Comparator.comparingDouble(Budget::getLimit));
+        } else if ("Limit (Highest First)".equals(sortOption)) {
+            sorted.sort(Comparator.comparingDouble(Budget::getLimit).reversed());
+        } else if ("Reset Period (A-Z)".equals(sortOption)) {
+            sorted.sort(Comparator.comparing(budget -> budget.getPeriod().name()));
+        }
+
+        for (Budget budget : sorted) {
             boolean matchesTitle = budget.getTitle().toLowerCase().contains(titleFilter);
             boolean matchesCategory = (categoryFilter == null || budget.getCategory() == categoryFilter);
 
@@ -172,24 +190,29 @@ public class BudgetManagerController {
         }
     }
 
+    private void showBudgetDetailsDialog(Budget budget) {
+        Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+        dialog.setTitle("Budget Details");
+        dialog.setHeaderText(budget.getTitle());
+
+        String content = String.format(
+                "Category: %s%nlimit: $%.2f%nSpent: $%.2f%nRemaining: $%.2f%nPeriod: %s%nLast Reset: %s",
+                budget.getCategory(),
+                budget.getLimit(),
+                budget.getSpent(),
+                budget.getRemaining(),
+                budget.getPeriod().name(),
+                budget.getLastResetDate()
+        );
+
+        dialog.setContentText(content);
+        dialog.showAndWait();
+    }
+
     // Separate method for creating a budget row
     private HBox createBudgetRow(Budget budget) {
         // Status label: "left" or "OVERSPENT"
-        String status = budget.isOverspent() ? "OVERSPENT" : "left";
-        String remainingStr = String.format("%.2f", budget.getRemaining());
-
-        Label budgetLabel = new Label(
-                budget.getTitle() + " | " +
-                        budget.getCategory() + " | $" +
-                        String.format("%.2f", budget.getLimit()) + " limit | $" +
-                        String.format("%.2f", budget.getSpent()) + " spent | $" +
-                        remainingStr + " " + status + " | " +
-                        budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
-        );
-        // Red color if overspent, going to change to progress bars in the future
-        if (budget.getRemaining() < 0) {
-            budgetLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-        }
+        Label budgetLabel = getBudgetLabel(budget);
 
         Label resetLabel = new Label("Last Reset: " + budget.getLastResetDate());
         resetLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
@@ -225,11 +248,33 @@ public class BudgetManagerController {
 
         VBox budgetInfoBox = new VBox(2, budgetLabel, resetLabel);
         HBox budgetRow = new HBox(10, budgetInfoBox, editBtn, deleteBtn);
+        budgetRow.setOnMouseClicked(event -> {
+            showBudgetDetailsDialog(budget);
+        });
         budgetRow.setPadding(new Insets(5));
-        budgetRow.getStyleClass().add("budget-item-row");
-        budgetRow.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+        budgetRow.getStyleClass().add("budget-row");
         budgetRow.setId(budget.getId());
         return budgetRow;
+    }
+
+    // Extracted Method for better readability
+    private Label getBudgetLabel(Budget budget) {
+        String status = budget.isOverspent() ? "OVERSPENT" : "left";
+        String remainingStr = String.format("%.2f", budget.getRemaining());
+
+        Label budgetLabel = new Label(
+                budget.getTitle() + " | " +
+                        budget.getCategory() + " | $" +
+                        String.format("%.2f", budget.getLimit()) + " limit | $" +
+                        String.format("%.2f", budget.getSpent()) + " spent | $" +
+                        remainingStr + " " + status + " | " +
+                        budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
+        );
+        // Red color if overspent, going to change to progress bars in the future
+        if (budget.getRemaining() < 0) {
+            budgetLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        }
+        return budgetLabel;
     }
 
     /*
@@ -241,6 +286,16 @@ public class BudgetManagerController {
 
         searchTitleField.textProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
         filterCategoryBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
+
+        // Initialize Sorting
+        sortComboBox.getItems().clear(); // Prevent duplicates
+        sortComboBox.getItems().addAll(
+                "Title (A-Z)",
+                "Limit (Lowest First)",
+                "Limit (Highest First)",
+                "Reset Period (A-Z)"
+        );
+        sortComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshBudgets());
     }
 
     /*

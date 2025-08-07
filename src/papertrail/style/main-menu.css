@@ -34,3 +34,13 @@
 .budget-button:hover {
     -fx-background-color: #FB8C00;
 }
+
+/* Settings button (black) */
+.settings-button {
+    -fx-background-color: #212121;
+    -fx-text-fill: white;
+}
+.settings-button:hover {
+    -fx-background-color: #000000;
+}
+
