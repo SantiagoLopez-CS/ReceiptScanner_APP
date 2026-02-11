@@ -12,6 +12,10 @@ public class Task {
     private double expectedAmount;
     private boolean isCompleted;
 
+    // Required by Jackson for deserialization
+    public Task() {
+    }
+
     public Task(String title, String description, Category category, LocalDate dueDate, double expectedAmount, boolean isCompleted) {
         this.id = UUID.randomUUID().toString(); // Auto-generate unique ID
         this.title = title;

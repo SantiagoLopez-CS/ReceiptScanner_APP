@@ -1,5 +1,7 @@
 package papertrail.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,7 +13,9 @@ public class Budget {
     private double spent; // How much has been spent so far
     private BudgetPeriod period;
     private LocalDate lastResetDate;
-    private final String id = UUID.randomUUID().toString();
+    private String id = UUID.randomUUID().toString();
+
+    public Budget() {}
 
     public Budget(String title, Category category, double limit, BudgetPeriod period) {
         this.title = title;
@@ -38,6 +42,7 @@ public class Budget {
     public void subtractExpense(double amount) {
         this.spent = Math.max(0.0, this.spent - amount);
     }
+    @JsonIgnore
     public boolean isOverspent() {
         return spent > limit;
     }
@@ -56,6 +61,7 @@ public class Budget {
         this.spent += amount;
     }
 
+    @JsonIgnore
     public double getRemaining() {
         return limit - spent;
     }

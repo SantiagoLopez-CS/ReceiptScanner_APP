@@ -10,5 +10,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="JavaFX" level="project" />
+    <orderEntry type="library" exported="" name="jackson-datatype-jsr310-2.17.2" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.17.2" level="project" />
+    <orderEntry type="library" exported="" name="jackson-core-2.17.2" level="project" />
+    <orderEntry type="library" exported="" name="jackson-annotations-2.17.2" level="project" />
   </component>
 </module>

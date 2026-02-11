@@ -114,7 +114,6 @@
                 <Insets top="15" right="15" bottom="15" left="15" />
             </padding>
             <VBox spacing="10">
-                <Label text="Budget's List" />
                 <VBox fx:id="mainBudgetListVBox" spacing="5" />
             </VBox>
             <Label fx:id="emptyBudgetLabel" text="No budgets available." visible="false" styleClass="empty-label" />

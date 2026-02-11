@@ -10,6 +10,7 @@ import papertrail.model.Task;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
 import papertrail.service.TaskManager;
+import papertrail.storage.TaskStorage;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -84,6 +85,9 @@ public class TaskManagerController {
     public void setManagers(TaskManager taskManager, BudgetManager budgetManager) {
         this.taskManager = taskManager;
         this.budgetManager = budgetManager;
+
+        // Load saved tasks from JSON
+        taskManager.setTasks(TaskStorage.loadTasks());
         refreshTasks(); // Initial load of tasks
     }
 
@@ -162,6 +166,8 @@ public class TaskManagerController {
         // Create and add the Task
         Task newTask = new Task(title, descr, cat, due, amt, false);
         taskManager.addTask(newTask);
+
+        TaskStorage.saveTasks(taskManager.getAllTasks());
 
         // Check if a budget for this category already exists
         boolean budgetExists = budgetManager.getAllBudgets().stream()
@@ -261,6 +267,7 @@ public class TaskManagerController {
             deleteBtn.setTooltip(deleteBtnTooltip);
             deleteBtn.setOnAction(e -> {
                 taskManager.removeTask(task.getId());
+                TaskStorage.saveTasks(taskManager.getAllTasks());
                 refreshTasks(); // Refresh list after deletion
             });
 
@@ -271,6 +278,7 @@ public class TaskManagerController {
                 } else {
                     task.setCompleted(false); // Manually unmarked
                 }
+                TaskStorage.saveTasks(taskManager.getAllTasks());
                 refreshTasks();
             });
 

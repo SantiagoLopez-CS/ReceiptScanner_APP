@@ -1,5 +1,6 @@
 package papertrail.service;
 
+import papertrail.model.Budget;
 import papertrail.model.Task;
 
 import java.util.ArrayList;
@@ -50,6 +51,13 @@ public class TaskManager {
                 .filter(t -> t.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void setTasks(List<Task> taskList) {
+        tasks.clear();
+        if (taskList != null) {
+            tasks.addAll(taskList);
+        }
     }
 }
 

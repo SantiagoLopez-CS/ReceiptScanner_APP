@@ -2,6 +2,8 @@ package papertrail.service;
 
 import papertrail.model.Budget;
 import papertrail.model.Receipt;
+import papertrail.storage.ReceiptStorage;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,43 @@ public class ReceiptManager {
     public ReceiptManager(BudgetManager budgetManager) {
         this.budgetManager = budgetManager;
     }
+
+    public void setReceipts(List<Receipt> loadedReceipts) {
+        receipts.clear();
+        receipts.addAll(loadedReceipts);
+
+        // Re-link receipts to budgets
+        for (Receipt receipt : receipts) {
+            Budget linkedBudget = null;
+
+            // 1️⃣ Try linking by budgetId
+            if (receipt.getBudgetId() != null) {
+                for (Budget budget : budgetManager.getAllBudgets()) {
+                    if (budget.getId().equals(receipt.getBudgetId())) {
+                        linkedBudget = budget;
+                        break;
+                    }
+                }
+            }
+
+            // 2️⃣ Fallback: link by category if budgetId not found
+            if (linkedBudget == null) {
+                for (Budget b : budgetManager.getAllBudgets()) {
+                    if (b.getCategory() == receipt.getCategory()) {
+                        linkedBudget = b;
+                        receipt.setBudgetId(b.getId());
+                        break;
+                    }
+                }
+            }
+
+            // 3️⃣ If linked, re-add expense
+            if (linkedBudget != null) {
+                linkedBudget.addExpense(receipt.getAmountSpent());
+            }
+        }
+    }
+
     // Add receipt to the list
     public void addReceipt(Receipt receipt) {
         // Find a matching budget
@@ -27,7 +66,7 @@ public class ReceiptManager {
             }
         }
         receipts.add(receipt); // Store receipt
-        //save(); TODO: Add save method
+        save();
     }
     // Remove receipt from the list by ID
     public boolean removeReceipt(String id) {
@@ -37,6 +76,7 @@ public class ReceiptManager {
             if (r.getId().equals(id)) {
                 iterator.remove();
                 budgetManager.removeExpense(r.getBudgetId(), r.getAmountSpent());
+                save();
                 return true;
             }
         }
@@ -46,5 +86,10 @@ public class ReceiptManager {
     // Make COPY of receipt list
     public List<Receipt> getAllReceipts() {
         return new ArrayList<>(receipts);
+    }
+
+    // Manual save method
+    public void save() {
+        ReceiptStorage.saveReceipts(receipts);
     }
 }

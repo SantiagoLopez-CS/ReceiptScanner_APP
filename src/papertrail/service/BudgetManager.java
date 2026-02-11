@@ -58,4 +58,16 @@ public class BudgetManager {
             b.resetIfNeeded();
         }
     }
+
+    // Repopulate map for JSON serialization
+    public void setBudgets(List<Budget> budgetList) {
+        budgets.clear();
+        if (budgetList != null) {
+            for (Budget b : budgetList) {
+                budgets.put(b.getId(), b);
+            }
+        }
+    }
+
+    public void relinkReceiptsToBudgets() {}
 }

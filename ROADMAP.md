@@ -11,28 +11,22 @@ This file outlines the planned versions and feature milestones for the PaperTrai
 
 ## 🔜 UPCOMING ALPHA RELEASES
 
-### 🔹 v0.13.0-alpha — Sorting & Settings Stub
-- Add sorting logic to all views (Task, Receipt, Budget)
-- Add ComboBox sort selectors to all manager UIs
-- Add hover effects to list items for UX clarity
-- Add "No items to show" message when lists are empty
-- Add a settings button (stub only) to main menu for future configuration options
-
-### 🔹 v0.14.0-alpha — Data Persistence: Budget & Task
-- Implement file-based storage and loading of `Budget` objects
-- Implement file-based storage and loading of `Task` objects
-- Implement file-based storage and loading of `Receipt` objects
+### 🔹 v0.14.0-alpha — Data Persistence: Budget, Task & Receipt (JSON)
+- Implement JSON-based storage and loading of `Budget` objects
+- Implement JSON-based storage and loading of `Task` objects
+- Implement JSON-based storage and loading of `Receipt` objects
 - Ensure UUIDs, limits, amounts, dates, and categories persist correctly
+- Store data in `/storage` package (e.g., `budgets.json`, `tasks.json`, `receipts.json`)
 
-### 🔹 v0.15.0-alpha — Data Persistence: Receipt
-- Add persistent storage and loading for `Receipt` objects
+### 🔹 v0.15.0-alpha — Data Integrity & Cross-Linking
 - Update budget references on receipt load (using `budgetId`)
-- Ensure data integrity across budget → receipt linkage
+- Validate data integrity across budget → receipt linkage
+- Add error handling for invalid or missing references
 
-### 🔹 v0.16.0-alpha — Refactor Storage Logic
-- Create `storage/` package for `BudgetStorage`, `ReceiptStorage`, `TaskStorage`
-- Modularize save/load logic
-- Make storage format pluggable (JSON, CSV, etc.)
+### 🔹 v0.16.0-alpha — Modular Storage Refactor
+- Create generic `Storage<T>` interface for persistence logic
+- Modularize save/load logic across all models
+- Make storage format pluggable (JSON default, with option for CSV or others in future)
 
 ### 🔹 v0.17.0-alpha — OCR Integration
 - Add basic support for uploading receipt images

@@ -4,12 +4,17 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class Receipt {
-    private final String id;
+    private String id;
     private String store;
     private Category category;
     private LocalDate dayOfPurchase;
     private double amountSpent;
     private String budgetId;
+
+    // No-arg constructor for JSON deserialization
+    public Receipt() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     public Receipt(String store, Category category, LocalDate dayOfPurchase, double amountSpent, String budgetId) {
         this.id = UUID.randomUUID().toString(); // auto-generate random ID
@@ -29,6 +34,7 @@ public class Receipt {
     }
 
     public String getId() { return id; }
+    public void setId(String id) { this.id = id; } // Added for deserialization
 
     public String getStore() { return store; }
     public void setStore(String store) { this.store = store; }

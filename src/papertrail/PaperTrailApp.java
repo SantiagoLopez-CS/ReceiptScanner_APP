@@ -13,6 +13,9 @@ import papertrail.model.*;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
+import papertrail.storage.BudgetStorage;
+import papertrail.storage.ReceiptStorage;
+import papertrail.storage.TaskStorage;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,23 +35,29 @@ public class PaperTrailApp extends Application{
         primaryStage.setTitle("📋 PaperTrail Dashboard"); // Set Title of Stage
 
         // Create TaskManager backend to pass into resources.view
-        TaskManager taskManager = new TaskManager();
         BudgetManager budgetManager = new BudgetManager();
+        budgetManager.setBudgets(BudgetStorage.loadBudgets());
+
+        TaskManager taskManager = new TaskManager();
+        taskManager.setTasks(TaskStorage.loadTasks());
+
         ReceiptManager receiptManager = new ReceiptManager(budgetManager);
+        receiptManager.setReceipts(ReceiptStorage.loadReceipts());
+
         //TaskUI Tests
-        taskManager.addTask(new Task("Finish budget report", "Complete the Q3 budget summary and send to manager.", Category.PERSONAL, LocalDate.now().plusDays(2), 0.00, false));
-        taskManager.addTask(new Task("Upload receipt photos", "Scan and upload all grocery and gas receipts for July.", Category.FOOD, LocalDate.now().plusDays(1), 120.50, false));
-        taskManager.addTask(new Task("Pay rent", "Transfer payment to landlord's account.", Category.HOUSING, LocalDate.now().plusDays(5), 850.00, false));
-        taskManager.addTask(new Task("Review subscriptions", "Cancel unused entertainment subscriptions.", Category.ENTERTAINMENT, LocalDate.now().plusDays(3), 15.99, false));
+//        taskManager.addTask(new Task("Finish budget report", "Complete the Q3 budget summary and send to manager.", Category.PERSONAL, LocalDate.now().plusDays(2), 0.00, false));
+//        taskManager.addTask(new Task("Upload receipt photos", "Scan and upload all grocery and gas receipts for July.", Category.FOOD, LocalDate.now().plusDays(1), 120.50, false));
+//        taskManager.addTask(new Task("Pay rent", "Transfer payment to landlord's account.", Category.HOUSING, LocalDate.now().plusDays(5), 850.00, false));
+//        taskManager.addTask(new Task("Review subscriptions", "Cancel unused entertainment subscriptions.", Category.ENTERTAINMENT, LocalDate.now().plusDays(3), 15.99, false));
         // BudgetUI Test
-        budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00, BudgetPeriod.WEEKLY));
-        budgetManager.addBudget(new Budget("Gas Budget", Category.TRANSPORTATION, 50.00, BudgetPeriod.MONTHLY));
-        budgetManager.addBudget(new Budget("Fun Budget", Category.ENTERTAINMENT, 75.00, BudgetPeriod.MONTHLY));
+//        budgetManager.addBudget(new Budget("Starter Budget", Category.FOOD, 100.00, BudgetPeriod.WEEKLY));
+//        budgetManager.addBudget(new Budget("Gas Budget", Category.TRANSPORTATION, 50.00, BudgetPeriod.MONTHLY));
+//        budgetManager.addBudget(new Budget("Fun Budget", Category.ENTERTAINMENT, 75.00, BudgetPeriod.MONTHLY));
         // ReceiptUI Tests
-        receiptManager.addReceipt(new Receipt("Walmart", Category.FOOD, LocalDate.now().minusDays(1), 24.50, budgetManager.getAllBudgets().get(0).getId()));
-        receiptManager.addReceipt(new Receipt("Shell", Category.TRANSPORTATION, LocalDate.now().minusDays(2), 35.00, budgetManager.getAllBudgets().get(1).getId()));
-        receiptManager.addReceipt(new Receipt("Netflix", Category.ENTERTAINMENT, LocalDate.now().minusDays(3), 12.99, budgetManager.getAllBudgets().get(2).getId()));
-        receiptManager.addReceipt(new Receipt("Clash", Category.ENTERTAINMENT, LocalDate.now().minusDays(5), 5.99, budgetManager.getAllBudgets().get(2).getId()));
+//        receiptManager.addReceipt(new Receipt("Walmart", Category.FOOD, LocalDate.now().minusDays(1), 24.50, budgetManager.getAllBudgets().get(0).getId()));
+//        receiptManager.addReceipt(new Receipt("Shell", Category.TRANSPORTATION, LocalDate.now().minusDays(2), 35.00, budgetManager.getAllBudgets().get(1).getId()));
+//        receiptManager.addReceipt(new Receipt("Netflix", Category.ENTERTAINMENT, LocalDate.now().minusDays(3), 12.99, budgetManager.getAllBudgets().get(2).getId()));
+//        receiptManager.addReceipt(new Receipt("Clash", Category.ENTERTAINMENT, LocalDate.now().minusDays(5), 5.99, budgetManager.getAllBudgets().get(2).getId()));
 
 
         // Load Main Menu FXML

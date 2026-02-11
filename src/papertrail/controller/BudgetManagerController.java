@@ -10,10 +10,13 @@ import papertrail.model.Budget;
 import papertrail.model.BudgetPeriod;
 import papertrail.model.Category;
 import papertrail.service.BudgetManager;
+import papertrail.storage.BudgetStorage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import papertrail.storage.BudgetStorage;
 
 public class BudgetManagerController {
     @FXML private TextField titleField;
@@ -49,7 +52,10 @@ public class BudgetManagerController {
         categoryComboBox.getItems().addAll(Category.values());
         periodComboBox.getItems().addAll(BudgetPeriod.values());
 
-        refreshBudgets(); // Initial Load
+        // Load any saved budgets from JSON
+        budgetManager.setBudgets(BudgetStorage.loadBudgets());
+        // Display saved budgets
+        refreshBudgets();
         initializeFilters();
     }
 
@@ -129,6 +135,7 @@ public class BudgetManagerController {
         }
 
         refreshBudgets();
+        BudgetStorage.saveBudgets(budgetManager.getAllBudgets());
         titleField.clear();
         categoryComboBox.setValue(null);
         limitField.clear();
@@ -233,6 +240,7 @@ public class BudgetManagerController {
         deleteBtn.setOnAction(actionEvent -> {
             budgetManager.removeBudget(budget);
             refreshBudgets();
+            BudgetStorage.saveBudgets(budgetManager.getAllBudgets());
         });
 
         editBtn.setOnAction(actionEvent -> {
