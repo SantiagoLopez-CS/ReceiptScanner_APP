@@ -49,18 +49,29 @@ public class Budget {
         this.period = period;
     }
 
-    public void resetIfNeeded() {
-        LocalDate now = LocalDate.now();
-        boolean shouldReset = switch (period) {
-            case WEEKLY -> lastResetDate.plusWeeks(1).isBefore(now) || lastResetDate.plusWeeks(1).isEqual(now);
-            case MONTHLY -> lastResetDate.plusMonths(1).isBefore(now) || lastResetDate.plusMonths(1).isEqual(now);
-            case YEARLY -> lastResetDate.plusYears(1).isBefore(now) || lastResetDate.plusYears(1).isEqual(now);
-        };
-        if (shouldReset) {
-            this.spent = 0.0;
-            this.lastResetDate = now;
-        }
+   public void resetIfNeeded() {
+    LocalDate now = LocalDate.now();
+    boolean shouldReset;
+
+    switch (period) {
+        case WEEKLY:
+            shouldReset = !lastResetDate.plusWeeks(1).isAfter(now);
+            break;
+        case MONTHLY:
+            shouldReset = !lastResetDate.plusMonths(1).isAfter(now);
+            break;
+        case YEARLY:
+            shouldReset = !lastResetDate.plusYears(1).isAfter(now);
+            break;
+        default:
+            shouldReset = false;
     }
+
+    if (shouldReset) {
+        this.spent = 0.0;
+        this.lastResetDate = now;
+    }
+  }
 
     @Override
     public String toString() {

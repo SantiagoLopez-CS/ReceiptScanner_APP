@@ -41,6 +41,13 @@ public class BudgetManager {
         }
         return false;
     }
+    // Function to remove the receipt expense when a receipt is deleted
+    public void removeExpense(Category category, double amount) {
+        Budget budget = budgets.get(category);
+        if (budget != null) {
+            budget.setSpent(Math.abs(budget.getSpent() - amount));
+        }
+    }
 
     // (Optional) Get a specific budget by category
     public Budget getBudgetByCategory(Category category) {

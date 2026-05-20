@@ -124,11 +124,11 @@ public class BudgetManagerView extends VBox {
     private HBox createBudgetRow(Budget budget) {
         Label budgetLabel = new Label(
                 budget.getTitle() + " | " +
-                        budget.getCategory() + " | $" +
-                        budget.getLimit() + " limit | $" +
-                        budget.getSpent() + " spent | $" +
-                        budget.getRemaining() + " left | " +
-                        budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
+                budget.getCategory() + " | $" +
+                String.format("%.2f", budget.getLimit()) + " limit | $" +
+                String.format("%.2f", budget.getSpent()) + " spent | $" +
+                String.format("%.2f", budget.getRemaining()) + " left | " +
+                budget.getPeriod().name().toLowerCase().replace("_", " ") + " budget"
         );
 
         // Create and add Edit/Delete Buttons for each Budget
