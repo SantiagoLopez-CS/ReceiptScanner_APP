@@ -16,8 +16,11 @@ public class BudgetManager {
     public void addBudget(Budget budget) {
         budgets.put(budget.getCategory(), budget);
     }
-    public void removeBudget(Budget budget) {
-        budgets.remove(budget);
+    public boolean removeBudget(Budget budget) {
+        if (budget == null) {
+            return false;
+        }
+        return budgets.remove(budget.getCategory()) != null;
     }
     // Show all the current Budget's with a COPY of the real list
     public List<Budget> getAllBudgets() {
@@ -45,7 +48,7 @@ public class BudgetManager {
     public void removeExpense(Category category, double amount) {
         Budget budget = budgets.get(category);
         if (budget != null) {
-            budget.setSpent(Math.abs(budget.getSpent() - amount));
+            budget.setSpent(Math.max(0, budget.getSpent() - amount));
         }
     }
 

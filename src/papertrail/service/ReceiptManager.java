@@ -23,7 +23,14 @@ public class ReceiptManager {
     }
     // Remove receipt from the list by ID
     public boolean removeReceipt(String id) {
-        return receipts.removeIf(r -> r.getId().equals(id));
+        for (Receipt receipt : receipts) {
+            if (receipt.getId().equals(id)) {
+                receipts.remove(receipt);
+                budgetManager.removeExpense(receipt.getCategory(), receipt.getAmountSpent());
+                return true;
+            }
+        }
+        return false;
     }
     // Print all available receipts
     // Make COPY of receipt list

@@ -26,7 +26,6 @@ public class ReceiptManagerView extends VBox {
         Label receiptTitle = new Label("Receipt Manager");
         receiptTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        // addReceipt fields
         TextField storeNameField = new TextField();
         storeNameField.setPromptText("Store Name");
 
@@ -36,7 +35,7 @@ public class ReceiptManagerView extends VBox {
 
         DatePicker dayOfPurchase = new DatePicker();
         dayOfPurchase.setPromptText("Day of Purchase");
-        dayOfPurchase.setValue(LocalDate.now()); // Default date to "Today"
+        dayOfPurchase.setValue(LocalDate.now());
 
         TextField spentField = new TextField();
         spentField.setPromptText("Amount Spent");
@@ -54,7 +53,7 @@ public class ReceiptManagerView extends VBox {
         ScrollPane scrollPane = new ScrollPane(receiptContentHBox);
         scrollPane.setFitToWidth(true);
 
-        javafx.scene.control.Button backBtn = new javafx.scene.control.Button("⬅ Back to Main Menu");
+        Button backBtn = new Button("Back to Main Menu");
         backBtn.setOnAction(actionEvent -> primaryStage.setScene(mainMenuScene));
 
         addReceiptBtn.setOnAction(actionEvent -> {
@@ -62,13 +61,15 @@ public class ReceiptManagerView extends VBox {
             Category cat = categoryComboBox.getValue();
             LocalDate day = dayOfPurchase.getValue();
             double spent;
+
             try {
                 spent = Double.parseDouble(spentField.getText());
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Please enter a valid number for 'Amount Spent'.");
                 alert.show();
-                return; // Stop execution
+                return;
             }
+
             Receipt newReceipt = new Receipt(store, cat, day, spent);
             receiptManager.addReceipt(newReceipt);
 
@@ -79,6 +80,7 @@ public class ReceiptManagerView extends VBox {
 
             refreshReceipts();
         });
+
         getChildren().addAll(
                 receiptTitle,
                 new HBox(10, storeNameField, categoryComboBox),
@@ -89,6 +91,7 @@ public class ReceiptManagerView extends VBox {
                 backBtn
         );
     }
+
     public void refreshReceipts() {
         receiptListVBox.getChildren().clear();
 
@@ -99,18 +102,10 @@ public class ReceiptManagerView extends VBox {
                     receipt.getDayOfPurchase() + " | $" +
                     receipt.getAmountSpent() + " spent"
             );
-            Button deleteBtn = new Button("🗑");
+
+            Button deleteBtn = new Button("Delete");
             deleteBtn.setOnAction(actionEvent -> {
-                public boolean removeReceipt(String id) {
-                    for (Receipt r : receiptManager.getAllReceipts()) {
-                        if (r.getId().equals(id)) {
-                            receiptManager.removeReceipt(r);
-                            budgetManager.removeExpense(r.getCategory(), r.getAmountSpent());
-                            return true;
-                        }
-                    }
-                    return false;
-                }
+                receiptManager.removeReceipt(receipt.getId());
                 refreshReceipts();
             });
 

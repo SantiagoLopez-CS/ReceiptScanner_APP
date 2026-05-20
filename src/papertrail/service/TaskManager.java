@@ -5,6 +5,7 @@ import papertrail.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TaskManager {
     // List of Tasks
@@ -41,7 +42,7 @@ public class TaskManager {
     public List<Task> getPendingTasks() {
         return tasks.stream()
                 .filter(t -> !t.isCompleted())
-                .toList(); // Returns a new list with filtered results
+                .collect(Collectors.toList()); // Returns a new list with filtered results
     }
 
     // Find a task by ID
