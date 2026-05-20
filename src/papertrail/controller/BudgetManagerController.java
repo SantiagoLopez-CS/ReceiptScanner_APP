@@ -184,7 +184,12 @@ public class BudgetManagerController {
     // Add highlight to budget after receipt is deleted
     public void highlightBudget(String budgetId) {
         for (javafx.scene.Node node : mainBudgetListVBox.getChildren()) {
-            if (node instanceof HBox row && budgetId.equals(row.getId())) {
+            if (node instanceof HBox) {
+                HBox row = (HBox) node;
+                if (!budgetId.equals(row.getId())) {
+                    continue;
+                }
+
                 String originalStyle = row.getStyle();
                 row.setStyle(originalStyle + "; -fx-background-color: yellow;");
 

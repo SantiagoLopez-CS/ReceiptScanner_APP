@@ -235,10 +235,20 @@ public class TaskManagerController {
         String sortBy = sortComboBox.getValue();
         if (sortBy != null) {
             switch (sortBy) {
-                case "Title (A-Z)" -> filtered.sort(Comparator.comparing(Task::getTitle, String.CASE_INSENSITIVE_ORDER));
-                case "Due Date (Soonest First)" -> filtered.sort(Comparator.comparing(Task::getDueDate));
-                case "Amount (Lowest First)" -> filtered.sort(Comparator.comparing(Task::getExpectedAmount));
-                case "Amount (Highest First)" -> filtered.sort(Comparator.comparing(Task::getExpectedAmount).reversed());
+                case "Title (A-Z)":
+                    filtered.sort(Comparator.comparing(Task::getTitle, String.CASE_INSENSITIVE_ORDER));
+                    break;
+                case "Due Date (Soonest First)":
+                    filtered.sort(Comparator.comparing(Task::getDueDate));
+                    break;
+                case "Amount (Lowest First)":
+                    filtered.sort(Comparator.comparing(Task::getExpectedAmount));
+                    break;
+                case "Amount (Highest First)":
+                    filtered.sort(Comparator.comparing(Task::getExpectedAmount).reversed());
+                    break;
+                default:
+                    break;
             }
         }
 

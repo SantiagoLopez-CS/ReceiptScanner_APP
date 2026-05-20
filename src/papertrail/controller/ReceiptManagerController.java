@@ -193,11 +193,23 @@ public class ReceiptManagerController {
         String sortBy = sortComboBox.getValue();
         if (sortBy != null) {
             switch (sortBy) {
-                case "Title (A-Z)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getStore, String.CASE_INSENSITIVE_ORDER));
-                case "Purchase Date (Oldest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase));
-                case "Purchase Date (Soonest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase).reversed());
-                case "Amount (Lowest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent));
-                case "Amount (Highest First)" -> filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent).reversed());
+                case "Title (A-Z)":
+                    filteredReceipts.sort(Comparator.comparing(Receipt::getStore, String.CASE_INSENSITIVE_ORDER));
+                    break;
+                case "Purchase Date (Oldest First)":
+                    filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase));
+                    break;
+                case "Purchase Date (Soonest First)":
+                    filteredReceipts.sort(Comparator.comparing(Receipt::getDayOfPurchase).reversed());
+                    break;
+                case "Amount (Lowest First)":
+                    filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent));
+                    break;
+                case "Amount (Highest First)":
+                    filteredReceipts.sort(Comparator.comparing(Receipt::getAmountSpent).reversed());
+                    break;
+                default:
+                    break;
             }
         }
 
