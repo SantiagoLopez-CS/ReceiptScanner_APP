@@ -3,79 +3,149 @@
 ![License](https://img.shields.io/github/license/SantiagoLopez-CS/ReceiptScanner_APP)
 ![Last Commit](https://img.shields.io/github/last-commit/SantiagoLopez-CS/ReceiptScanner_APP)
 
-# 📋 PaperTrail
+# PaperTrail
 
-**PaperTrail** is a JavaFX desktop application designed to help users manage **budgets, receipts, and tasks** in a single, organized workflow.  
-The project focuses on clean architecture, usability, and real-world application structure using **Java**, **JavaFX**, and **MVC principles**.
+PaperTrail is a JavaFX desktop application for organizing personal budgets, receipts, and spending-related tasks in one place. The project is built as a portfolio application to demonstrate object-oriented Java, JavaFX UI development, MVC-style structure, validation, filtering, sorting, and file-based persistence.
 
----
+The app is currently in active alpha development. The current focus is making the core desktop experience stable, readable, and easy to extend before adding larger features like OCR receipt scanning and analytics.
 
-## ✨ Features
+## Features
 
-- 💰 **Budget Manager**
-    - Create and manage budgets with spending limits
-    - Track spending progress and remaining balances
+### Budget Manager
 
-- 🧾 **Receipt Manager**
-    - Add and organize receipts with validation
-    - Designed for future OCR-based receipt scanning
+- Create budgets by title, category, limit, and reset period
+- Track spent amount and remaining balance
+- Filter budgets by title and category
+- Sort budgets by title, limit, or reset period
+- Edit and delete existing budgets
+- Automatically reset budgets based on weekly, monthly, or yearly periods
 
-- ✅ **Task Manager**
-    - Create, sort, and manage tasks
-    - Separate completed and incomplete tasks for clarity
+### Receipt Manager
 
-Each module is built as a dedicated JavaFX view with its own controller and validation logic.
+- Add receipts with store name, category, purchase date, and amount spent
+- Link receipts to matching budgets by category
+- Update budget spending when receipts are added or removed
+- Filter receipts by store, category, and date
+- Sort receipts by title, date, or amount
+- Persist receipts to JSON files
 
----
+### Task Manager
 
-## 🧱 Architecture
+- Create spending-related tasks with title, description, category, due date, and expected amount
+- Mark tasks complete or incomplete
+- Show or hide completed tasks
+- Filter tasks by title and category
+- Sort tasks by title, due date, or expected amount
+- Persist tasks to JSON files
 
-- **Language:** Java (17+)
-- **UI Framework:** JavaFX
-- **Architecture Pattern:** MVC (Model–View–Controller)
-- **Design Focus:**
-    - Modular controllers
-    - Clear separation of concerns
-    - Maintainable, readable code
+## Tech Stack
 
-The codebase is structured to support future expansion without major refactoring.
+- Java 8
+- JavaFX
+- FXML
+- CSS
+- Jackson for JSON serialization
+- Git and GitHub
 
----
+## Architecture
 
-## 🛠️ Technologies & Concepts
+PaperTrail uses a simple MVC-style structure:
 
-- Java & JavaFX
-- Object-Oriented Programming (OOP)
-- MVC Architecture
-- Input Validation & Error Handling
-- Collections & Data Structures
-- File-based persistence (in progress)
-- Git & GitHub for version control
+```text
+src/
+  papertrail/
+    controller/   JavaFX controller logic
+    model/        Budget, Receipt, Task, Category, BudgetPeriod
+    service/      Business logic managers
+    storage/      JSON save/load helpers
+    style/        JavaFX CSS files
+  resources/
+    view/         FXML layouts
+```
 
----
+The application separates UI layout, controller behavior, model objects, service logic, and persistence helpers so each part can evolve independently.
 
-## 🚧 Roadmap & Planned Enhancements
+## How To Run
 
-PaperTrail is actively evolving toward a more production-ready personal finance tool.
+### Requirements
 
-Planned features include:
-- 💾 Persistent storage using **JSON and/or SQL**
-- 🔍 **OCR integration via REST API** for automatic receipt scanning
-- ⚠️ Budget limit warnings and visual indicators
-- 📊 Expense analytics by category and time period
+- JDK 8
+- Windows PowerShell or VS Code terminal
+- The bundled Jackson `.jar` files in the `lib/` folder
 
-Each feature is implemented incrementally with versioned milestones.
+Java 8 is used because it includes JavaFX by default. A future upgrade to Java 17 or Java 21 would require adding OpenJFX as a separate dependency.
 
----
+### Compile
 
-## 🧠 Developer Notes
+From the project root:
 
-PaperTrail was built to mirror how real-world desktop applications are designed — not as a tutorial project, but as a scalable foundation.  
-The emphasis is on **clean structure, predictable behavior, and long-term maintainability**, while continuing to expand functionality over time.
+```powershell
+cd C:\Users\santi\OneDrive\Desktop\PaperTrailApp\PaperTrailApp
+& 'C:\Program Files\Java\jdk-1.8\bin\javac.exe' -encoding UTF-8 -cp '.\lib\*' -d .\out ((Get-ChildItem -Recurse -Filter *.java -Path .\src).FullName)
+```
 
----
+### Run
 
-## 📌 Status
+```powershell
+& 'C:\Program Files\Java\jdk-1.8\bin\java.exe' -cp '.\out;.\src;.\lib\*' papertrail.PaperTrailApp
+```
 
-🚀 **Active Development**  
-This project is continuously improved as new features and refinements are added.
+You can also run `PaperTrailApp.java` directly from VS Code after opening this folder:
+
+```text
+C:\Users\santi\OneDrive\Desktop\PaperTrailApp\PaperTrailApp
+```
+
+## Data Persistence
+
+PaperTrail stores user data locally as JSON:
+
+```text
+data/budgets.json
+data/receipts.json
+data/tasks.json
+```
+
+These files are created automatically when data is saved.
+
+## Development Status
+
+Current status: active alpha development.
+
+Completed so far:
+
+- JavaFX/FXML screen structure
+- Budget, receipt, and task workflows
+- Input validation
+- Filtering and sorting
+- JSON persistence with Jackson
+- CSS styling for the main views
+- JDK 8-compatible compile setup
+
+Planned improvements:
+
+- Add screenshots and a demo GIF to the README
+- Add automated backend tests
+- Improve JSON data integrity checks
+- Add dashboard/summary analytics
+- Add receipt image upload and OCR integration
+- Add a formal Maven or Gradle build
+- Upgrade to a newer Java version with OpenJFX configured
+
+## What I Learned
+
+This project has helped me practice building a larger Java application beyond isolated exercises. The main learning areas include:
+
+- Designing object-oriented models and service classes
+- Connecting JavaFX controllers to FXML views
+- Managing UI state across multiple screens
+- Validating user input in desktop forms
+- Persisting Java objects to JSON with Jackson
+- Keeping GitHub branches and project structure organized
+- Debugging compiler errors caused by Java version mismatches
+
+## Repository Notes
+
+The active branch for development is `main`.
+
+Older branch history exists from earlier project iterations, but current work should continue from `main` to keep the project easy to follow.
