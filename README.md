@@ -114,6 +114,24 @@ You can also run `PaperTrailApp.java` directly from VS Code after opening this f
 C:\Users\santi\OneDrive\Desktop\PaperTrailApp\PaperTrailApp
 ```
 
+## Running Backend Tests
+
+PaperTrail includes a simple backend smoke test runner for the core service logic.
+
+Compile the project first:
+
+```powershell
+& 'C:\Program Files\Java\jdk-1.8\bin\javac.exe' -encoding UTF-8 -cp '.\lib\*' -d .\out ((Get-ChildItem -Recurse -Filter *.java -Path .\src).FullName)
+```
+
+Then run:
+
+```powershell
+& 'C:\Program Files\Java\jdk-1.8\bin\java.exe' -cp '.\out;.\lib\*' papertrail.BackendTests
+```
+
+The test runner checks task, budget, and receipt manager behavior and prints pass/fail output in the terminal.
+
 ## Data Persistence
 
 PaperTrail stores user data locally as JSON:
