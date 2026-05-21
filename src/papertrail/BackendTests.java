@@ -8,6 +8,8 @@ import papertrail.model.Task;
 import papertrail.service.BudgetManager;
 import papertrail.service.ReceiptManager;
 import papertrail.service.TaskManager;
+import papertrail.storage.BudgetStorage;
+import papertrail.storage.ReceiptStorage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,15 +22,20 @@ public class BackendTests {
     private static int failed = 0;
 
     public static void main(String[] args) throws IOException {
+        Path budgetsFile = Paths.get("data", "budgets.json");
         Path receiptsFile = Paths.get("data", "receipts.json");
+        boolean budgetsFileExists = Files.exists(budgetsFile);
         boolean receiptsFileExists = Files.exists(receiptsFile);
+        byte[] originalBudgetsFile = budgetsFileExists ? Files.readAllBytes(budgetsFile) : null;
         byte[] originalReceiptsFile = receiptsFileExists ? Files.readAllBytes(receiptsFile) : null;
 
         try {
             System.out.println("Running PaperTrail backend tests...");
             testTaskManager();
             testBudgetAndReceiptManagers();
+            testReceiptReloadRestoresBudgetSpent();
         } finally {
+            restoreFile(budgetsFile, budgetsFileExists, originalBudgetsFile);
             restoreFile(receiptsFile, receiptsFileExists, originalReceiptsFile);
         }
 
@@ -95,6 +102,39 @@ public class BackendTests {
         assertTrue("Receipt can be removed", receiptManager.removeReceipt(autoZoneReceipt.getId()));
         assertEquals("Receipt list is empty after removal", 0, receiptManager.getAllReceipts().size());
         assertDoubleEquals("Receipt removal subtracts from budget spent", 0.00, transportBudget.getSpent());
+    }
+
+    private static void testReceiptReloadRestoresBudgetSpent() {
+        BudgetManager originalBudgetManager = new BudgetManager();
+        ReceiptManager originalReceiptManager = new ReceiptManager(originalBudgetManager);
+
+        Budget originalBudget = new Budget(
+                "Reload Test Budget",
+                Category.FOOD,
+                100.00,
+                BudgetPeriod.MONTHLY
+        );
+        originalBudgetManager.addBudget(originalBudget);
+        BudgetStorage.saveBudgets(originalBudgetManager.getAllBudgets());
+
+        Receipt originalReceipt = new Receipt(
+                "Reload Test Store",
+                Category.FOOD,
+                LocalDate.of(2026, 4, 10),
+                24.50,
+                null
+        );
+        originalReceiptManager.addReceipt(originalReceipt);
+
+        BudgetManager reloadedBudgetManager = new BudgetManager();
+        reloadedBudgetManager.setBudgets(BudgetStorage.loadBudgets());
+
+        ReceiptManager reloadedReceiptManager = new ReceiptManager(reloadedBudgetManager);
+        reloadedReceiptManager.setReceipts(ReceiptStorage.loadReceipts());
+
+        Budget reloadedBudget = reloadedBudgetManager.getBudgetById(originalBudget.getId());
+        assertTrue("Reloaded budget exists", reloadedBudget != null);
+        assertDoubleEquals("Reloaded receipt restores budget spent", 24.50, reloadedBudget.getSpent());
     }
 
     private static void restoreFile(Path path, boolean existed, byte[] originalContent) throws IOException {

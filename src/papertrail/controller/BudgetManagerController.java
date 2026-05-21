@@ -50,8 +50,6 @@ public class BudgetManagerController {
         categoryComboBox.getItems().addAll(Category.values());
         periodComboBox.getItems().addAll(BudgetPeriod.values());
 
-        // Load any saved budgets from JSON
-        budgetManager.setBudgets(BudgetStorage.loadBudgets());
         // Display saved budgets
         refreshBudgets();
         initializeFilters();
