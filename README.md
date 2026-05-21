@@ -9,6 +9,24 @@ PaperTrail is a JavaFX desktop application for organizing personal budgets, rece
 
 The app is currently in active alpha development. The current focus is making the core desktop experience stable, readable, and easy to extend before adding larger features like OCR receipt scanning and analytics.
 
+## Screenshots
+
+### Main Menu
+
+![PaperTrail main menu](docs/screenshots/main-menu.png)
+
+### Budget Manager
+
+![PaperTrail budget manager](docs/screenshots/budget-manager.png)
+
+### Receipt Manager
+
+![PaperTrail receipt manager](docs/screenshots/receipt-manager.png)
+
+### Task Manager
+
+![PaperTrail task manager](docs/screenshots/task-manager.png)
+
 ## Features
 
 ### Budget Manager
@@ -124,7 +142,7 @@ Completed so far:
 
 Planned improvements:
 
-- Add screenshots and a demo GIF to the README
+- Add a demo GIF to the README
 - Add automated backend tests
 - Improve JSON data integrity checks
 - Add dashboard/summary analytics
