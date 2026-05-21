@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="settingsVBox"
+      fx:controller="papertrail.controller.SettingsController"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@/papertrail/style/settings.css"
+      spacing="14"
+      minWidth="800"
+      minHeight="600">
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40" />
+    </padding>
+
+    <Label text="Settings" styleClass="screen-title" />
+    <Label text="Manage application preferences and local PaperTrail data." styleClass="screen-subtitle" />
+
+    <Separator />
+
+    <Label text="Application" styleClass="section-title" />
+    <Label text="Version: active alpha development" styleClass="settings-text" />
+    <Label text="Runtime: Java 8 with JavaFX" styleClass="settings-text" />
+    <Label text="Storage: local JSON files" styleClass="settings-text" />
+
+    <Separator />
+
+    <Label text="Local Data Files" styleClass="section-title" />
+    <Label text="data/budgets.json" styleClass="settings-text" />
+    <Label text="data/receipts.json" styleClass="settings-text" />
+    <Label text="data/tasks.json" styleClass="settings-text" />
+
+    <Separator />
+
+    <Label text="Data Management" styleClass="section-title" />
+    <Label text="Clear local data resets saved budgets, receipts, and tasks for this app." styleClass="settings-text" />
+    <Button text="Clear Local Data" onAction="#handleClearData" styleClass="danger-button" />
+
+    <VBox VBox.vgrow="ALWAYS" />
+
+    <Button text="Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button" />
+</VBox>

@@ -1,7 +1,6 @@
 package papertrail.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 public class MainMenuController {
@@ -15,6 +14,7 @@ public class MainMenuController {
     private Runnable onTaskPressed;
     private Runnable onReceiptPressed;
     private Runnable onBudgetPressed;
+    private Runnable onSettingsPressed;
 
     // Buttons for switching Windows
     public void initialize() {
@@ -34,12 +34,10 @@ public class MainMenuController {
                 onBudgetPressed.run();
             }
         });
-        settingsBtn.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Settings (Coming Soon)");
-            alert.setHeaderText("This feature is not available yet.");
-            alert.setContentText("In a future update, you'll be able to customize sorting, themes, and display preferences.");
-            alert.showAndWait();
+        settingsBtn.setOnAction(actionEvent -> {
+            if (onSettingsPressed != null) {
+                onSettingsPressed.run();
+            }
         });
 
     }
@@ -52,6 +50,9 @@ public class MainMenuController {
     }
     public void setOnBudgetPressed(Runnable action) {
         this.onBudgetPressed = action;
+    }
+    public void setOnSettingsPressed(Runnable action) {
+        this.onSettingsPressed = action;
     }
 
 }

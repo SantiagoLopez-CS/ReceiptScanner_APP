@@ -208,7 +208,7 @@ public class TaskManagerController {
      * Refreshes the list of tasks in the UI.
      * Called after adding, deleting, or updating a task.
      */
-    private void refreshTasks() {
+    public void refreshTasks() {
         // Remove all children except the empty label, so empty label stays in the VBox
         incompleteTasksVBOX.getChildren().removeIf(node -> node != emptyIncompleteLabel);
         completedTasksVBOX.getChildren().removeIf(node -> node != emptyCompletedLabel);
