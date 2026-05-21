@@ -27,6 +27,10 @@ The app is currently in active alpha development. The current focus is making th
 
 ![PaperTrail task manager](docs/screenshots/task-manager.png)
 
+### Settings
+
+The app also includes a Settings screen for viewing application details and clearing local JSON data.
+
 ## Features
 
 ### Budget Manager
@@ -55,6 +59,12 @@ The app is currently in active alpha development. The current focus is making th
 - Filter tasks by title and category
 - Sort tasks by title, due date, or expected amount
 - Persist tasks to JSON files
+
+### Settings
+
+- View basic application/runtime information
+- See the local JSON data file paths used by the app
+- Clear local budgets, receipts, and tasks with a confirmation prompt
 
 ## Tech Stack
 
@@ -156,12 +166,13 @@ Completed so far:
 - Filtering and sorting
 - JSON persistence with Jackson
 - CSS styling for the main views
+- Settings screen with local data reset
 - JDK 8-compatible compile setup
 
 Planned improvements:
 
 - Add a demo GIF to the README
-- Add automated backend tests
+- Expand backend test coverage
 - Improve JSON data integrity checks
 - Add dashboard/summary analytics
 - Add receipt image upload and OCR integration
