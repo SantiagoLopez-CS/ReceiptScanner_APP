@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import papertrail.storage.BudgetStorage;
-
 public class BudgetManagerController {
     @FXML private TextField titleField;
     @FXML private ComboBox<Category> categoryComboBox;
