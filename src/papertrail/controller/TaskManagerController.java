@@ -270,7 +270,7 @@ public class TaskManagerController {
             taskLabel.getStyleClass().add("task-label");
 
             // Delete Button
-            Button deleteBtn = new Button("🗑");
+            Button deleteBtn = new Button("Delete");
             deleteBtn.getStyleClass().add("delete-button");
             Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this task");
             Tooltip.install(deleteBtn, deleteBtnTooltip);
@@ -333,7 +333,7 @@ public class TaskManagerController {
         Label categoryLabel = new Label("Category: " + task.getCategory());
         Label dueLabel = new Label("Due Date: " + task.getDueDate());
         Label amountLabel = new Label(String.format("Expected Amount: $%.2f", task.getExpectedAmount()));
-        Label statusLabel = new Label("Completed: " + (task.isCompleted() ? "✅ Yes" : "❌ No"));
+        Label statusLabel = new Label("Completed: " + (task.isCompleted() ? "Yes" : "No"));
 
         // Add all labels to the dialog's content
         content.getChildren().addAll(

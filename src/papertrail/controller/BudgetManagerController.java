@@ -116,7 +116,7 @@ public class BudgetManagerController {
         if (!valid) return;
 
 
-        // ✅ If valid, proceed with creation or update
+        // If valid, proceed with creation or update
         if (editingBudget != null) {
             // The budget exists, update values
             editingBudget.setTitle(title);
@@ -226,13 +226,13 @@ public class BudgetManagerController {
         resetLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
 
         // Create and add Edit/Delete Buttons for each Budget
-        Button editBtn = new Button("✏️");
+        Button editBtn = new Button("Edit");
         Tooltip editTooltip = new Tooltip("Edit this budget's details");
         Tooltip.install(editBtn, editTooltip);
         editBtn.setTooltip(editTooltip);
         editBtn.getStyleClass().add("edit-button");
 
-        Button deleteBtn = new Button("🗑");
+        Button deleteBtn = new Button("Delete");
         Tooltip deleteTooltip = new Tooltip("Remove this budget permanently");
         Tooltip.install(deleteBtn, deleteTooltip);
         deleteBtn.setTooltip(deleteTooltip);

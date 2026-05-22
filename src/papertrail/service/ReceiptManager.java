@@ -26,7 +26,7 @@ public class ReceiptManager {
         for (Receipt receipt : receipts) {
             Budget linkedBudget = null;
 
-            // 1️⃣ Try linking by budgetId
+            // First try linking by budgetId
             if (receipt.getBudgetId() != null) {
                 for (Budget budget : budgetManager.getAllBudgets()) {
                     if (budget.getId().equals(receipt.getBudgetId())) {
@@ -36,7 +36,7 @@ public class ReceiptManager {
                 }
             }
 
-            // 2️⃣ Fallback: link by category if budgetId not found
+            // Fallback: link by category if budgetId not found
             if (linkedBudget == null) {
                 for (Budget b : budgetManager.getAllBudgets()) {
                     if (b.getCategory() == receipt.getCategory()) {
@@ -47,7 +47,7 @@ public class ReceiptManager {
                 }
             }
 
-            // 3️⃣ If linked, re-add expense
+            // If linked, re-add expense
             if (linkedBudget != null) {
                 linkedBudget.addExpense(receipt.getAmountSpent());
             }

@@ -21,7 +21,7 @@
     <Label text="Receipt Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
     <!-- Section Label: Add new Receipt -->
-    <Label text="➕ Add a New Receipt" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Add a New Receipt" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Row 1: Store name + Category -->
     <HBox spacing="10">
@@ -79,7 +79,7 @@
     <Separator />
 
     <!-- Section Label: Search/Filter -->
-    <Label text="🔍 Search / Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Search / Filter Receipts" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Filter Section -->
     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -128,7 +128,7 @@
     </HBox>
 
     <!-- Section Label: Receipt List -->
-    <Label text="📋 Receipt List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Receipt List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Scrollable receipt list -->
     <ScrollPane fitToWidth="true" styleClass="scroll-section">
@@ -144,7 +144,7 @@
     </ScrollPane>
 
     <!-- Back Button -->
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
+    <Button text="Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>

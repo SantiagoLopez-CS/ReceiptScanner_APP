@@ -77,7 +77,7 @@ public class ReceiptManagerController {
         this.budgetManager = budgetManager;
 
         refreshReceipts(); // Initial load of tasks
-        // 👇 Set default date to today
+        // Set default date to today
         dayOfPurchase.setValue(LocalDate.now());
     }
 
@@ -172,7 +172,7 @@ public class ReceiptManagerController {
         // Create a copy of all the receipts for filtering and sorting
         List<Receipt> filteredReceipts = new ArrayList<>(receiptManager.getAllReceipts());
 
-        emptyReceiptsLabel.setVisible(true); // 🔍 See if it ever shows
+        emptyReceiptsLabel.setVisible(true);
 
         // Apply filters
         filteredReceipts.removeIf(receipt -> {
@@ -234,7 +234,7 @@ public class ReceiptManagerController {
     }
 
     private HBox getHBox(Receipt receipt, Label receiptLabel) {
-        Button deleteBtn = new Button("🗑");
+        Button deleteBtn = new Button("Delete");
         deleteBtn.getStyleClass().add("delete-button");
         Tooltip deleteBtnTooltip = new Tooltip("Permanently delete this Receipt");
         Tooltip.install(deleteBtn, deleteBtnTooltip);

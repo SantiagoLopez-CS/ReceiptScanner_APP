@@ -17,8 +17,8 @@
     <!-- Title -->
     <Label text="Budget Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-    <!-- ➕ Add Section -->
-    <Label text="➕ Add a New Budget" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <!-- Add Section -->
+    <Label text="Add a New Budget" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- New input section with validation messages -->
     <VBox spacing="10">
@@ -76,9 +76,9 @@
     <Separator />
 
     <!-- Search/Filter Section -->
-    <Label text="🔍 Search / Filter Budgets" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Search / Filter Budgets" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-    <!-- 👇 Filter/search row -->
+    <!-- Filter/search row -->
     <HBox spacing="10" alignment="CENTER_LEFT">
         <!-- Title Search Option -->
         <TextField fx:id="searchTitleField" promptText="Search by Title">
@@ -106,7 +106,7 @@
     </HBox>
 
     <!-- Budget List -->
-    <Label text="📋 Budget List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Budget List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <ScrollPane fitToWidth="true" styleClass="scroll-section">
         <HBox fx:id="budgetContentHBox" spacing="30">
@@ -121,7 +121,7 @@
     </ScrollPane>
 
     <!-- Back Button -->
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
+    <Button text="Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>

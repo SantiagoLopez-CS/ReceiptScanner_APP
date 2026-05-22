@@ -54,6 +54,6 @@ public class Task {
                 "\nDue Date: " + dueDate +
                 "\nCategory: " + category +
                 "\nExpected Amount: $" + expectedAmount +
-                "\nStatus: " + (isCompleted ? "Completed [✓]" : "Pending [✗]");
+                "\nStatus: " + (isCompleted ? "Completed" : "Pending");
     }
 }

@@ -18,7 +18,7 @@
     <Label text="Task Manager" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
     <!-- Section Label -->
-    <Label text="➕ Add a New Task" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Add a New Task" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Row 1: Title + Description -->
     <HBox spacing="10">
@@ -82,7 +82,7 @@
     <Separator />
 
     <!-- Section Label -->
-    <Label text="🔍 Search / Filter Tasks" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Search / Filter Tasks" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Search/Filter -->
     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -131,7 +131,7 @@
     </HBox>
 
     <!-- Section Label -->
-    <Label text="📋 Task List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+    <Label text="Task List" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <ScrollPane fitToWidth="true" styleClass="scroll-section">
         <HBox fx:id="taskListHBox" spacing="30" minHeight="200">
@@ -147,7 +147,7 @@
             </VBox>
             <!-- Complete -->
             <VBox spacing="10" minWidth="250">
-                <Label text="✅ Completed Tasks" />
+                <Label text="Completed Tasks" />
                 <VBox fx:id="completedTasksVBOX" spacing="5">
                     <Label text="No completed tasks yet." fx:id="emptyCompletedLabel" visible="false" />
                 </VBox>
@@ -155,7 +155,7 @@
         </HBox>
     </ScrollPane>
 
-    <Button text="⬅ Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
+    <Button text="Back to Main Menu" onAction="#handleBackToMenu" styleClass="back-button">
         <tooltip>
             <Tooltip text="Return to the main PaperTrail menu" />
         </tooltip>
